@@ -4,15 +4,23 @@ import {TaskType} from "./TodoList";
 
 type TasksListPropsType = {
     tasks: Array<TaskType>
+    removeTask: (taskID: number) => void
 }
 
+//отрисовывает список соответсвенно колличеству тасков
+// (преобразовываем массивы одного типа в массивы другого типа)
 const TasksList = (props: TasksListPropsType) => {
+    const tasksComponents = props.tasks.map(task => {
+        return <Task
+            key={task.id}
+            {...task}
+            removeTask={props.removeTask}
+        />
+    })
+
     return (
         <ul>
-            <Task {...props.tasks[0]} />
-            <Task {...props.tasks[1]} />
-            <Task {...props.tasks[2]} />
-            <Task {...props.tasks[3]} />
+            {tasksComponents}
         </ul>
     );
 };

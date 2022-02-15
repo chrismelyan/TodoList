@@ -6,11 +6,12 @@ type ButtonsType = {
 }
 
 const Buttons = (props: ButtonsType) => {
+    const onClickSetFilter = (filter: FilterValuesType) => () => props.changeFilter(filter)
     return (
         <div>
-            <button onClick={() => props.changeFilter('all')}>All</button>
-            <button onClick={() => props.changeFilter('active')}>Active</button>
-            <button onClick={() => props.changeFilter('completed')}>Completed</button>
+            <button onClick={onClickSetFilter('all')}>All</button>
+            <button onClick={onClickSetFilter('active')}>Active</button>
+            <button onClick={onClickSetFilter('completed')}>Completed</button>
         </div>
     );
 };

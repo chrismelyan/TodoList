@@ -7,14 +7,15 @@ import {FilterValuesType} from "./App";
 
 type TodoListFormPropsType = {
     tasks: Array<TaskType>
-    removeTask: (taskID: number) => void
+    removeTask: (taskID: string) => void
     changeFilter: (filter: FilterValuesType) => void
+    addTask: (title: string) => void
 }
 
 const TodoListForm = (props: TodoListFormPropsType) => {
     return (
         <div>
-            <InputForm />
+            <InputForm addTask={props.addTask}/>
             <TasksList
                 tasks={props.tasks}
                 removeTask={props.removeTask}

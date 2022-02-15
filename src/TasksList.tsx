@@ -4,7 +4,7 @@ import {TaskType} from "./TodoList";
 
 type TasksListPropsType = {
     tasks: Array<TaskType>
-    removeTask: (taskID: number) => void
+    removeTask: (taskID: string) => void
 }
 
 //отрисовывает список соответсвенно колличеству тасков

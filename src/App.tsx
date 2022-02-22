@@ -9,7 +9,7 @@ function App() {
     console.log(v1())
     const [tasks, setTasks] = useState<Array<TaskType>>([
         {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "CSS", isDone: true},
+        {id: v1(), title: "CSS", isDone: false},
         {id: v1(), title: "JS", isDone: true},
         {id: v1(), title: "TS", isDone: false},
     ])
@@ -81,6 +81,7 @@ function App() {
                 changeFilter={changeFilter}
                 removeTask={removeTask}
                 addTask={addTask}
+                filter={filter}
             />
             {/*<TodoList title={'Must read'} tasks={tasks_2} removeTask={removeTask}/>*/}
             {/*<TodoList title={'Free time activities'} tasks={tasks_3}/>*/}

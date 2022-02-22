@@ -6,3 +6,17 @@
 .App > div {
   margin-right: 50px;
 }
+
+.completed-task {
+  opacity: 0.5;
+}
+
+.task {
+  font-weight: bold;
+}
+
+.filter-header {
+  margin-left: 20px;
+  font-size: 8px;
+  color: darkslategray;
+}

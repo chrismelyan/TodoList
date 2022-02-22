@@ -3,6 +3,7 @@ import {FilterValuesType} from "./App";
 
 type ButtonsType = {
     changeFilter: (filter: FilterValuesType) => void
+    filter: FilterValuesType
 }
 
 const Buttons = (props: ButtonsType) => {

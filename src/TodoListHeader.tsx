@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css'
 import {FilterValuesType} from "./App";
 
 type TodoListHeaderPropsType = {
@@ -6,7 +7,16 @@ type TodoListHeaderPropsType = {
     filter: FilterValuesType
 }
 const TodoListHeader = (props: TodoListHeaderPropsType) => {
-    return <h3>{props.title}</h3>
+    let text = 'all'
+    switch (props.filter) {
+        case 'active':
+            text = 'act'
+            break
+        case 'completed':
+            text = 'cmp'
+            break
+    }
+    return <h3>{props.title} <span className={'filter-header'}>{text}</span></h3>
 };
 
 export default TodoListHeader;

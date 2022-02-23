@@ -5,40 +5,40 @@ type InputFormType = {
 }
 const InputForm: React.FC<InputFormType> = ({addTask}) => {
     const [title, setTitle] = useState<string>('')
-    console.log(title)
+    const [error, setError] = useState<boolean>(false)
+
     const onClickAddTask = () => {
-        addTask(title)
+        const trimmedTitle = title.trim()
+        if (trimmedTitle) {
+            addTask(trimmedTitle)
+        } else {
+            setError(true)
+        }
         setTitle('')
     }
     const onChangeSetTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-        console.log(e.nativeEvent)
+        setError(false)
     }
     const onKeyPressSetTitle = (e: KeyboardEvent<HTMLInputElement>) => {
-        if(e.key === 'Enter') {
-            onClickAddTask()
-        }
+        e.key === 'Enter' && onClickAddTask()
     }
+
+    const errorMessage = error && <div style={{color: 'red'}}>Title is required</div>
+
     return (
         <div>
             <input
                 value={title}
-            onChange={onChangeSetTitle}
+                onChange={onChangeSetTitle}
                 onKeyPress={onKeyPressSetTitle}
+                className={error ? 'error' : ''}
             />
             <button onClick={onClickAddTask}>+</button>
+            {errorMessage}
         </div>
     );
 };
 
 export default InputForm;
 
-// const InputForm = (props: InputFormType) => {
-//
-//     return (
-//         <div>
-//             <input/>
-//             <button onClick={() => props.addTask("New Task")}>+</button>
-//         </div>
-//     );
-// };

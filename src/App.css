@@ -16,7 +16,28 @@
 }
 
 .filter-header {
+  display: inline-block;
+  padding: 5px;
+  border-radius: 50%;
   margin-left: 20px;
-  font-size: 8px;
-  color: darkslategray;
+  font-size: 12px;
+  background-color: darkslategray;
+  color: white;
+  min-width: 30px;
+  text-align: center;
+}
+
+.button-active {
+  color: white;
+  background-color: darkslategray;
+}
+
+.empty-list {
+  font-size: 13px;
+  color: darkred;
+}
+
+.error {
+  outline: none;
+  border: 2px solid red;
 }

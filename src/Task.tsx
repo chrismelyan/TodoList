@@ -1,25 +1,26 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import {TaskType} from "./TodoList";
 
 type TaskPropsType = TaskType & {
     removeTask: (taskID: string) => void
+    changeTaskStatus: (taskID: string, isDone: boolean) => void
 }
 
 const Task = (props: TaskPropsType) => {
-    // let taskClass = ''
-    // if(props.isDone) {
-    //     taskClass += ' completed-task'
-    // }
     let taskClass = `task ${props.isDone ? 'completed-task' : ''}`
-
     // let classes = ['task']              // className={'task completed-task'} - два класса на спане. ClassName возвращает строку!!!
     // if(props.isDone) {
     //     classes.push('completes-task')
     // }
 
+    const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
+        // props.changeTaskStatus(props.id, !props.isDone) - почему работает
+        props.changeTaskStatus(props.id, e.currentTarget.checked)
+    }
+
     return (
             <li>
-                <input type="checkbox" checked={props.isDone}/>
+                <input type="checkbox" onChange={changeTaskStatus} checked={props.isDone}/>
                 <span className={taskClass}>{props.title}</span>
                 <button onClick={() => props.removeTask(props.id)}>x</button>
             </li>

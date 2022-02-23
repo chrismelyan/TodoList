@@ -1,10 +1,12 @@
 import React from 'react';
+import './App.css'
 import Task from "./Task";
 import {TaskType} from "./TodoList";
 
 type TasksListPropsType = {
     tasks: Array<TaskType>
     removeTask: (taskID: string) => void
+    changeTaskStatus: (taskID: string, isDone: boolean) => void
 }
 
 //отрисовывает список соответсвенно колличеству тасков
@@ -15,13 +17,15 @@ const TasksList = (props: TasksListPropsType) => {
             key={task.id}
             {...task}
             removeTask={props.removeTask}
+            changeTaskStatus={props.changeTaskStatus}
         />
     })
 
-    return (
-        <ul>
+    return (tasksComponents.length
+        ? <ul>
             {tasksComponents}
         </ul>
+            : <span className={'empty-list'}>Task list is empty</span>
     );
 };
 

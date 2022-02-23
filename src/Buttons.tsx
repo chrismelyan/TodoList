@@ -10,9 +10,9 @@ const Buttons = (props: ButtonsType) => {
     const onClickSetFilter = (filter: FilterValuesType) => () => props.changeFilter(filter)
     return (
         <div>
-            <button onClick={onClickSetFilter('all')}>All</button>
-            <button onClick={onClickSetFilter('active')}>Active</button>
-            <button onClick={onClickSetFilter('completed')}>Completed</button>
+            <button className={props.filter === 'all' ? 'button-active' : ''} onClick={onClickSetFilter('all')}>All</button>
+            <button className={props.filter === 'active' ? 'button-active' : ''} onClick={onClickSetFilter('active')}>Active</button>
+            <button className={props.filter === 'completed' ? 'button-active' : ''} onClick={onClickSetFilter('completed')}>Completed</button>
         </div>
     );
 };

@@ -2,12 +2,13 @@ import React from 'react';
 import {FilterValuesType} from "./App";
 
 type ButtonsType = {
-    changeFilter: (filter: FilterValuesType) => void
+    todolistID: string
+    changeFilter: (todolistID: string, filter: FilterValuesType) => void
     filter: FilterValuesType
 }
 
 const Buttons = (props: ButtonsType) => {
-    const onClickSetFilter = (filter: FilterValuesType) => () => props.changeFilter(filter)
+    const onClickSetFilter = (filter: FilterValuesType) => () => props.changeFilter(props.todolistID, filter)
     return (
         <div>
             <button className={props.filter === 'all' ? 'button-active' : ''} onClick={onClickSetFilter('all')}>All</button>

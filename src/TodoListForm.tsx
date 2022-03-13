@@ -10,7 +10,7 @@ type TodoListFormPropsType = {
     filter: FilterValuesType
     todolistID: string
     removeTask: (todolistID: string, taskID: string) => void
-    changeFilter: (filter: FilterValuesType) => void
+    changeFilter: (todolistID: string, filter: FilterValuesType) => void
     addTask: (todolistID: string, title: string) => void
     changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
 }
@@ -28,7 +28,11 @@ const TodoListForm = (props: TodoListFormPropsType) => {
                 removeTask={props.removeTask}
                 changeTaskStatus={props.changeTaskStatus}
             />
-            <Buttons changeFilter={props.changeFilter} filter={props.filter}/>
+            <Buttons
+                todolistID={props.todolistID}
+                changeFilter={props.changeFilter}
+                filter={props.filter}
+            />
         </div>
     );
 };

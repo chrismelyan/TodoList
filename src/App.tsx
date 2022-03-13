@@ -37,27 +37,28 @@ function App() {
         ],
     })
 
-    const [filter, setFilter] = useState<FilterValuesType>('all')
-
     //Удаляем таску, отфильтровываем массив обьектов и создаем новый массив уже без удаленного
     const removeTask = (todolistID: string, taskID: string) => {
         // => true (filter засовывает в массив обьекты если значение true)
-        setTasks({[todolistID]:tasks[todolistID].filter(el => el.id !==taskID)});
+        setTasks({...tasks, [todolistID] : tasks[todolistID].filter(el => el.id !== taskID)});
     }
     // Добавление нового таска в массив
     const addTask = (todolistID: string, title: string) => {
         // копируем массив тасков и добавляем первым в него новый обьект
         const task = {id: v1(), title, isDone: false};
-        const todolistTask = tasks[todolistID];
-        setTasks({[todolistID]:[task, ...todolistTask], ...tasks})
+        setTasks({...tasks, [todolistID] : [task, ...tasks[todolistID]]})
     }
 
     const changeTaskStatus = (todolistID: string, taskID: string, isDone: boolean) => {
-        setTasks({[todolistID]:tasks[todolistID].map(el => el.id === taskID ? {...el, isDone} : el)})
+        setTasks({...tasks, [todolistID] : tasks[todolistID].map(el => el.id === taskID ? {...el, isDone} : el)})
     }
 
-    const changeFilter = (filter: FilterValuesType) => {
-        setFilter(filter)
+    const changeFilter = (todolistID: string, value: FilterValuesType) => {
+        let todoList = todolist.find(tl => tl.id === todolistID);
+        if (todoList) {
+            todoList.filter = value;
+            setTodolist([...todolist])
+        }
     }
 
 

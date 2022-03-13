@@ -26,7 +26,8 @@ const InputForm: React.FC<InputFormType> = ({todolistID, addTask}) => {
         e.key === 'Enter' && onClickAddTask()
     }
 
-    const errorMessage = error && <div style={{color: 'red'}}>Title is required</div>
+    const errorMessage = error && <div style={{color: 'red', fontSize: '10px'}}>Title is required</div>
+    const inputClass = `input ${error ? 'error' : ''}`
 
     return (
         <div>
@@ -34,9 +35,9 @@ const InputForm: React.FC<InputFormType> = ({todolistID, addTask}) => {
                 value={title}
                 onChange={onChangeSetTitle}
                 onKeyPress={onKeyPressSetTitle}
-                className={error ? 'error' : ''}
+                className={inputClass}
             />
-            <button onClick={onClickAddTask}>+</button>
+            <button className={'button-sign'} onClick={onClickAddTask}>+</button>
             {errorMessage}
         </div>
     );

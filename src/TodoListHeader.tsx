@@ -16,7 +16,7 @@ const TodoListHeader = (props: TodoListHeaderPropsType) => {
             text = 'cmp'
             break
     }
-    return <h3>{props.title} <span className={'filter-header'}>{text}</span></h3>
+    return <h3 className={'header'}>{props.title} <span className={'filter-header'}>{text}</span></h3>
 };
 
 export default TodoListHeader;

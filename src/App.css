@@ -4,40 +4,88 @@
 }
 
 .App > div {
-  margin-right: 50px;
+  padding: 20px;
 }
 
 .completed-task {
-  opacity: 0.5;
+  font-weight: lighter;
+}
+
+.span {
+  margin-left: 15px;
+}
+
+.header {
+  text-align: center;
+  font-size: 22px;
+  margin: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
 .task {
+  display: flex;
+}
+
+.item {
+  margin: 10px 22px;
+  width: 150px;
   font-weight: bold;
 }
 
 .filter-header {
   display: inline-block;
   padding: 5px;
-  border-radius: 50%;
+  border-radius: 5px;
   margin-left: 20px;
   font-size: 12px;
-  background-color: darkslategray;
+  background-color: lightskyblue;
   color: white;
   min-width: 30px;
   text-align: center;
 }
 
 .button-active {
+  font-weight: bold;
   color: white;
-  background-color: darkslategray;
+  background-color: dodgerblue;
+}
+
+.input {
+  width: 200px;
+  outline: none;
+  padding: 7px;
+  margin-right: 10px;
+  margin-bottom: 17px;
+  border: 1px solid lightgrey;
 }
 
 .empty-list {
-  font-size: 13px;
-  color: darkred;
+  font-size: 15px;
+  font-style: italic;
+  color: red;
+  margin-left: 80px;
 }
 
 .error {
   outline: none;
   border: 2px solid red;
+  margin-bottom: 0;
+  width: 198px;
+}
+
+button {
+  margin: 10px;
+  background: white;
+  color: black;
+  width: 80px;
+  text-align: center;
+}
+
+.button-sign {
+  width: 30px;
+  font-weight: bold;
 }

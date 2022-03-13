@@ -1,16 +1,18 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 
+
 type InputFormType = {
-    addTask: (title: string) => void
+    todolistID: string
+    addTask: (todolistID: string, title: string) => void
 }
-const InputForm: React.FC<InputFormType> = ({addTask}) => {
+const InputForm: React.FC<InputFormType> = ({todolistID, addTask}) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
     const onClickAddTask = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
-            addTask(trimmedTitle)
+            addTask(todolistID, trimmedTitle)
         } else {
             setError(true)
         }

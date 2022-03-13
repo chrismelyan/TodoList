@@ -4,9 +4,10 @@ import Task from "./Task";
 import {TaskType} from "./TodoList";
 
 type TasksListPropsType = {
-    tasks: Array<TaskType>
-    removeTask: (taskID: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean) => void
+    tasks: TaskType[]
+    todolistID: string
+    removeTask: (todolistID: string, taskID: string) => void
+    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
 }
 
 //отрисовывает список соответсвенно колличеству тасков
@@ -14,6 +15,7 @@ type TasksListPropsType = {
 const TasksList = (props: TasksListPropsType) => {
     const tasksComponents = props.tasks.map(task => {
         return <Task
+            todolistID={props.todolistID}
             key={task.id}
             {...task}
             removeTask={props.removeTask}

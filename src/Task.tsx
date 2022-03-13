@@ -2,8 +2,9 @@ import React, {ChangeEvent} from 'react';
 import {TaskType} from "./TodoList";
 
 type TaskPropsType = TaskType & {
-    removeTask: (taskID: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean) => void
+    todolistID: string
+    removeTask: (todolistID: string, taskID: string) => void
+    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
 }
 
 const Task = (props: TaskPropsType) => {
@@ -15,14 +16,14 @@ const Task = (props: TaskPropsType) => {
 
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
         // props.changeTaskStatus(props.id, !props.isDone) - почему работает
-        props.changeTaskStatus(props.id, e.currentTarget.checked)
+        props.changeTaskStatus(props.todolistID, props.id, e.currentTarget.checked)
     }
 
     return (
             <li>
                 <input type="checkbox" onChange={changeTaskStatus} checked={props.isDone}/>
                 <span className={taskClass}>{props.title}</span>
-                <button onClick={() => props.removeTask(props.id)}>x</button>
+                <button onClick={() => props.removeTask(props.todolistID, props.id)}>x</button>
             </li>
     );
 };

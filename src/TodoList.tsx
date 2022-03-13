@@ -5,12 +5,13 @@ import {FilterValuesType} from "./App";
 
 type TodoListPropsType = {
     title: string
+    todolistID: string
     tasks: Array<TaskType>
     filter: FilterValuesType
-    removeTask: (taskID: string) => void
+    removeTask: (todolistID: string, taskID: string) => void
     changeFilter: (filter: FilterValuesType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean) => void
+    addTask: (todolistID: string, title: string) => void
+    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
 }
 export type TaskType = {
     id: string
@@ -22,6 +23,7 @@ const TodoList = (props: TodoListPropsType) => {
             <div>
                 <TodoListHeader title={props.title} filter={props.filter}/>
                 <TodoListForm
+                    todolistID={props.todolistID}
                     tasks={props.tasks}
                     removeTask={props.removeTask}
                     changeFilter={props.changeFilter}

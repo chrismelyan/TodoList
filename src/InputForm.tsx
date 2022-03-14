@@ -2,17 +2,16 @@ import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 
 
 type InputFormType = {
-    todolistID: string
-    addTask: (todolistID: string, title: string) => void
+    callbackAddValue: (title: string) => void
 }
-const InputForm: React.FC<InputFormType> = ({todolistID, addTask}) => {
+const InputForm: React.FC<InputFormType> = ({callbackAddValue}) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
     const onClickAddTask = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
-            addTask(todolistID, trimmedTitle)
+            callbackAddValue(trimmedTitle)
         } else {
             setError(true)
         }

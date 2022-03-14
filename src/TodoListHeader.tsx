@@ -4,7 +4,7 @@ import {FilterValuesType} from "./App";
 
 type TodoListHeaderPropsType = {
     title: string
-    filter: FilterValuesType
+    filter?: FilterValuesType
 }
 const TodoListHeader = (props: TodoListHeaderPropsType) => {
     let text = 'all'
@@ -16,7 +16,10 @@ const TodoListHeader = (props: TodoListHeaderPropsType) => {
             text = 'cmp'
             break
     }
-    return <h3 className={'header'}>{props.title} <span className={'filter-header'}>{text}</span></h3>
+    return <h3
+        className={'header'}>{props.title}
+        {props.filter && <span className={'filter-header'}>{text}</span>}
+    </h3>
 };
 
 export default TodoListHeader;

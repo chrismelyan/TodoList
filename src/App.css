@@ -1,6 +1,7 @@
 .App {
   padding: 30px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .App > div {
@@ -16,7 +17,6 @@
 }
 
 .header {
-  text-align: center;
   font-size: 22px;
   margin: 5px;
 }

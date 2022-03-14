@@ -16,11 +16,14 @@ type TodoListFormPropsType = {
 }
 
 const TodoListForm = (props: TodoListFormPropsType) => {
+    const callbackAddValue = (title: string) => {
+        props.addTask(props.todolistID, title)
+    }
+
     return (
         <div>
             <InputForm
-                todolistID={props.todolistID}
-                addTask={props.addTask}
+                callbackAddValue={callbackAddValue}
             />
             <TasksList
                 todolistID={props.todolistID}

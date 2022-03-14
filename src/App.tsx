@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
+import InputForm from "./InputForm";
+import TodoListHeader from "./TodoListHeader";
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 export type TodolistType = {
@@ -40,17 +42,22 @@ function App() {
     //Удаляем таску, отфильтровываем массив обьектов и создаем новый массив уже без удаленного
     const removeTask = (todolistID: string, taskID: string) => {
         // => true (filter засовывает в массив обьекты если значение true)
-        setTasks({...tasks, [todolistID] : tasks[todolistID].filter(el => el.id !== taskID)});
+        setTasks({...tasks, [todolistID]: tasks[todolistID].filter(el => el.id !== taskID)});
     }
     // Добавление нового таска в массив
     const addTask = (todolistID: string, title: string) => {
         // копируем массив тасков и добавляем первым в него новый обьект
         const task = {id: v1(), title, isDone: false};
-        setTasks({...tasks, [todolistID] : [task, ...tasks[todolistID]]})
+        setTasks({...tasks, [todolistID]: [task, ...tasks[todolistID]]})
+    }
+    const addTodolist = (title: string) => {
+        const newID = v1();
+        setTodolist([{id: newID, title, filter: 'all'}, ...todolist])
+        setTasks({...tasks, [newID]: []})
     }
 
     const changeTaskStatus = (todolistID: string, taskID: string, isDone: boolean) => {
-        setTasks({...tasks, [todolistID] : tasks[todolistID].map(el => el.id === taskID ? {...el, isDone} : el)})
+        setTasks({...tasks, [todolistID]: tasks[todolistID].map(el => el.id === taskID ? {...el, isDone} : el)})
     }
 
     const changeFilter = (todolistID: string, value: FilterValuesType) => {
@@ -64,6 +71,10 @@ function App() {
 
     return (
         <div className="App">
+            <div>
+                <TodoListHeader title={'Your next Todo List ...'}/>
+                <InputForm callbackAddValue={addTodolist}/>
+            </div>
             {
                 todolist.map(el => {
                     let allTodolistTasks = tasks[el.id];

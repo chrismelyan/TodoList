@@ -39,10 +39,21 @@ function App() {
         ],
     })
 
+    const updateTask = (todolistID: string, taskID: string, title: string) => {
+        setTasks({...tasks, [todolistID] : tasks[todolistID].map(el => el.id === taskID ? {...el, title} : el)})
+    }
+    const updateTodolist = (todolistID: string, title: string) => {
+        setTodolist(todolist.map(el => el.id === todolistID ? {...el, title} : el))
+    }
     //Удаляем таску, отфильтровываем массив обьектов и создаем новый массив уже без удаленного
     const removeTask = (todolistID: string, taskID: string) => {
         // => true (filter засовывает в массив обьекты если значение true)
         setTasks({...tasks, [todolistID]: tasks[todolistID].filter(el => el.id !== taskID)});
+    }
+    const removeTodolist = (todolistID: string) => {
+        setTodolist(todolist.filter(el => el.id !== todolistID))
+        delete tasks[todolistID];
+        setTasks({...tasks})
     }
     // Добавление нового таска в массив
     const addTask = (todolistID: string, title: string) => {
@@ -68,11 +79,10 @@ function App() {
         }
     }
 
-
     return (
         <div className="App">
             <div>
-                <TodoListHeader title={'Your next Todo List ...'}/>
+                <TodoListHeader title={'Your next To do List'}/>
                 <InputForm callbackAddValue={addTodolist}/>
             </div>
             {
@@ -96,7 +106,10 @@ function App() {
                         removeTask={removeTask}
                         addTask={addTask}
                         filter={el.filter}
+                        removeTodolist={removeTodolist}
                         changeTaskStatus={changeTaskStatus}
+                        updateTask={updateTask}
+                        updateTodolist={updateTodolist}
                     />
                 })}
         </div>

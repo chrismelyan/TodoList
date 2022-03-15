@@ -8,11 +8,15 @@ type TasksListPropsType = {
     todolistID: string
     removeTask: (todolistID: string, taskID: string) => void
     changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
+    updateTask: (todolistID: string, taskID: string, title: string) => void
 }
 
 //отрисовывает список соответсвенно колличеству тасков
 // (преобразовываем массивы одного типа в массивы другого типа)
 const TasksList = (props: TasksListPropsType) => {
+    const updateTaskHandler = (taskID: string, title: string) => {
+        props.updateTask(props.todolistID, taskID, title)
+    }
     const tasksComponents = props.tasks.map(task => {
         return <Task
             todolistID={props.todolistID}
@@ -20,6 +24,7 @@ const TasksList = (props: TasksListPropsType) => {
             {...task}
             removeTask={props.removeTask}
             changeTaskStatus={props.changeTaskStatus}
+            callbackUpdate={(title) => updateTaskHandler(task.id, title)}
         />
     })
 

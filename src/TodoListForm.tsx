@@ -4,21 +4,34 @@ import Buttons from "./Buttons";
 import InputForm from "./InputForm";
 import {TaskType} from "./TodoList";
 import {FilterValuesType} from "./App";
+import {useDispatch} from "react-redux";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./store/tasks-reducer";
+import {changeFilterAC} from "./store/todolist-reducer";
 
 type TodoListFormPropsType = {
     tasks: TaskType[]
     filter: FilterValuesType
     todolistID: string
-    removeTask: (todolistID: string, taskID: string) => void
-    changeFilter: (todolistID: string, filter: FilterValuesType) => void
-    addTask: (todolistID: string, title: string) => void
-    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
-    updateTask: (todolistID: string, taskID: string, title: string) => void
 }
 
 const TodoListForm = (props: TodoListFormPropsType) => {
+    const dispatch = useDispatch()
+
+    const changeFilter = (value: FilterValuesType) => {
+        dispatch(changeFilterAC(props.todolistID, value))
+    }
     const callbackAddValue = (title: string) => {
-        props.addTask(props.todolistID, title)
+        dispatch(addTaskAC(title, props.todolistID))
+    }
+
+    const removeTask = (taskID: string) => {
+        dispatch(removeTaskAC(taskID, props.todolistID))
+    }
+    const changeTaskStatus = (taskID: string, isDone: boolean) => {
+        dispatch(changeTaskStatusAC(taskID, isDone, props.todolistID))
+    }
+    const updateTask = (taskID: string, title: string) => {
+        dispatch(changeTaskTitleAC(taskID, title, props.todolistID))
     }
 
     return (
@@ -27,15 +40,13 @@ const TodoListForm = (props: TodoListFormPropsType) => {
                 callbackAddValue={callbackAddValue}
             />
             <TasksList
-                todolistID={props.todolistID}
                 tasks={props.tasks}
-                removeTask={props.removeTask}
-                changeTaskStatus={props.changeTaskStatus}
-                updateTask={props.updateTask}
+                removeTask={removeTask}
+                changeTaskStatus={changeTaskStatus}
+                updateTask={updateTask}
             />
             <Buttons
-                todolistID={props.todolistID}
-                changeFilter={props.changeFilter}
+                changeFilter={changeFilter}
                 filter={props.filter}
             />
         </div>

@@ -6,7 +6,9 @@ export type ActionType = ReturnType<typeof addTodolistAC>
     | ReturnType<typeof updateTodolistAC>
     | ReturnType<typeof changeFilterAC>
 
-export const todolistReducer = (state: TodolistType[], action: ActionType): TodolistType[] => {
+const initialState: TodolistType[] = []
+
+export const todolistReducer = (state: TodolistType[] = initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case "ADD-TODOLIST":
             return [...state, {id: action.todolistID, title: action.title, filter: 'all'}];

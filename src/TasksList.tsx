@@ -1,31 +1,39 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import './App.css'
-import Task from "./Task";
 import {TaskType} from "./TodoList";
+import EditableSpan from "./EditableSpan";
 
 type TasksListPropsType = {
     tasks: TaskType[]
-    todolistID: string
-    removeTask: (todolistID: string, taskID: string) => void
-    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
-    updateTask: (todolistID: string, taskID: string, title: string) => void
+    removeTask: (taskID: string) => void
+    changeTaskStatus: (taskID: string, isDone: boolean) => void
+    updateTask: (taskID: string, title: string) => void
 }
 
-//отрисовывает список соответсвенно колличеству тасков
-// (преобразовываем массивы одного типа в массивы другого типа)
 const TasksList = (props: TasksListPropsType) => {
-    const updateTaskHandler = (taskID: string, title: string) => {
-        props.updateTask(props.todolistID, taskID, title)
-    }
+
     const tasksComponents = props.tasks.map(task => {
-        return <Task
-            todolistID={props.todolistID}
-            key={task.id}
-            {...task}
-            removeTask={props.removeTask}
-            changeTaskStatus={props.changeTaskStatus}
-            callbackUpdate={(title) => updateTaskHandler(task.id, title)}
-        />
+        const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
+            // props.changeTaskStatus(props.id, !props.isDone) - почему работает
+            props.changeTaskStatus(task.id, e.currentTarget.checked)
+        }
+        const updateTaskHandler = (title: string) => {
+            props.updateTask(task.id, title)
+        }
+
+        const spanClass = `span ${task.isDone ? 'completed-task' : ''}`
+
+        return (
+            <li key={task.id}>
+                <div className={'task'}>
+                    <div className={'item'}>
+                        <input type="checkbox" onChange={changeTaskStatus} checked={task.isDone}/>
+                        <EditableSpan className={spanClass} title={task.title} callbackUpdate={updateTaskHandler}/>
+                    </div>
+                    <button className={'button-sign'} onClick={() => props.removeTask(task.id)}>x</button>
+                </div>
+            </li>
+        );
     })
 
     return (tasksComponents.length

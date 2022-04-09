@@ -1,20 +1,13 @@
 import React from 'react';
 import TodoListHeader from "./TodoListHeader";
 import TodoListForm from "./TodoListForm";
-import {FilterValuesType} from "./App";
+import {TodolistType} from "./App";
+import {useDispatch, useSelector} from "react-redux";
+import {removeTodolistAC} from "./store/todolist-reducer";
+import {AppRootStoreType} from "./store/store";
 
 type TodoListPropsType = {
-    title: string
-    todolistID: string
-    tasks: Array<TaskType>
-    filter: FilterValuesType
-    removeTask: (todolistID: string, taskID: string) => void
-    changeFilter: (todolistID: string, filter: FilterValuesType) => void
-    addTask: (todolistID: string, title: string) => void
-    removeTodolist: (todolistID: string) => void
-    changeTaskStatus: (todolistID: string, taskID: string, isDone: boolean) => void
-    updateTask: (todolistID: string, taskID: string, title: string) => void
-    updateTodolist: (todolistID: string, title: string) => void
+    todolist: TodolistType
 }
 export type TaskType = {
     id: string
@@ -22,21 +15,32 @@ export type TaskType = {
     isDone: boolean
 }
 const TodoList = (props: TodoListPropsType) => {
+    const dispatch = useDispatch()
+    const todolistID = props.todolist.id
+
+    let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistID]);
+    if (props.todolist.filter === "active") {
+        tasksForTodolist = tasksForTodolist.filter(t => !t.isDone);
+    }
+    if (props.todolist.filter === "completed") {
+        tasksForTodolist = tasksForTodolist.filter(t => t.isDone);
+    }
+
+    const removeTodolist = () => {
+        dispatch(removeTodolistAC(todolistID))
+    }
+
+
     return (
         <div>
             <div style={{display: 'flex'}}>
-                <TodoListHeader title={props.title} filter={props.filter}/>
-                <button className={'button-sign'} onClick={() => props.removeTodolist(props.todolistID)}>x</button>
+                <TodoListHeader title={props.todolist.title} filter={props.todolist.filter}/>
+                <button className={'button-sign'} onClick={removeTodolist}>x</button>
             </div>
             <TodoListForm
-                todolistID={props.todolistID}
-                tasks={props.tasks}
-                removeTask={props.removeTask}
-                changeFilter={props.changeFilter}
-                addTask={props.addTask}
-                filter={props.filter}
-                changeTaskStatus={props.changeTaskStatus}
-                updateTask={props.updateTask}
+                todolistID={todolistID}
+                tasks={tasksForTodolist}
+                filter={props.todolist.filter}
             />
         </div>
     );

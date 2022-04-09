@@ -18,7 +18,6 @@ export type ChangeTaskStatusActionType = {
     isDone: boolean
     todolistID: string
 }
-
 export type ChangeTaskTitleActionType = {
     type: 'CHANGE-TASK-TITLE'
     taskID: string
@@ -33,7 +32,9 @@ type ActionsType = RemoveTaskActionType
     | ChangeTaskTitleActionType
     | ReturnType<typeof removeTodolistAC>;
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+const initialState: TasksStateType = {}
+
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             return {
@@ -71,14 +72,14 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
             }
         }
         case 'REMOVE-TODOLIST': {
-            const {[action.id]: [], ...rest} = {...state}
-            // let newState = {...state}
-            // delete newState[action.id]
-            // return newState
-            return rest
+            // const {[action.id]: [], ...rest} = {...state}
+            // return rest
+            let newState = {...state}
+            delete newState[action.id]
+            return newState
         }
         default:
-            throw new Error("I don't understand this type")
+            return state
     }
 }
 

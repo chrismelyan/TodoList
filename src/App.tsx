@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import InputForm from "./InputForm";
@@ -21,9 +21,9 @@ function App() {
     const dispatch = useDispatch()
     const todolists = useSelector<AppRootStoreType, TodolistType[]>(state => state.todolists)
 
-    const addTodolist = (title: string) => {
+    const addTodolist = useCallback((title: string) => {
        dispatch(addTodolistAC(title))
-    }
+    },[dispatch])
 
 
     return (

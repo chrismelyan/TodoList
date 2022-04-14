@@ -4,7 +4,7 @@ import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 type InputFormType = {
     callbackAddValue: (title: string) => void
 }
-const InputForm: React.FC<InputFormType> = ({callbackAddValue}) => {
+const InputForm: React.FC<InputFormType> = React.memo(({callbackAddValue}) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -40,7 +40,7 @@ const InputForm: React.FC<InputFormType> = ({callbackAddValue}) => {
             {errorMessage}
         </div>
     );
-};
+})
 
 export default InputForm;
 

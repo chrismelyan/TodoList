@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import TasksList from "./TasksList";
 import Buttons from "./Buttons";
 import InputForm from "./InputForm";
@@ -20,9 +20,9 @@ const TodoListForm = (props: TodoListFormPropsType) => {
     const changeFilter = (value: FilterValuesType) => {
         dispatch(changeFilterAC(props.todolistID, value))
     }
-    const callbackAddValue = (title: string) => {
+    const callbackAddValue = useCallback((title: string) => {
         dispatch(addTaskAC(title, props.todolistID))
-    }
+    }, [dispatch])
 
     const removeTask = (taskID: string) => {
         dispatch(removeTaskAC(taskID, props.todolistID))
@@ -30,9 +30,9 @@ const TodoListForm = (props: TodoListFormPropsType) => {
     const changeTaskStatus = (taskID: string, isDone: boolean) => {
         dispatch(changeTaskStatusAC(taskID, isDone, props.todolistID))
     }
-    const updateTask = (taskID: string, title: string) => {
+    const updateTask = useCallback((taskID: string, title: string) => {
         dispatch(changeTaskTitleAC(taskID, title, props.todolistID))
-    }
+    }, [dispatch])
 
     return (
         <div>

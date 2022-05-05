@@ -2,11 +2,10 @@ import React, {useCallback} from 'react';
 import TasksList from "./TasksList";
 import Buttons from "./Buttons";
 import InputForm from "./InputForm";
-import {TaskType} from "./TodoList";
-import {FilterValuesType} from "./App";
 import {useDispatch} from "react-redux";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./store/tasks-reducer";
-import {changeFilterAC} from "./store/todolist-reducer";
+import {changeFilterAC, FilterValuesType} from "./store/todolist-reducer";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
 
 type TodoListFormPropsType = {
     tasks: TaskType[]
@@ -22,17 +21,17 @@ const TodoListForm = (props: TodoListFormPropsType) => {
     }
     const callbackAddValue = useCallback((title: string) => {
         dispatch(addTaskAC(title, props.todolistID))
-    }, [dispatch])
+    }, [dispatch, props.todolistID])
 
     const removeTask = (taskID: string) => {
         dispatch(removeTaskAC(taskID, props.todolistID))
     }
-    const changeTaskStatus = (taskID: string, isDone: boolean) => {
-        dispatch(changeTaskStatusAC(taskID, isDone, props.todolistID))
+    const changeTaskStatus = (taskID: string, status: TaskStatuses) => {
+        dispatch(changeTaskStatusAC(taskID, status, props.todolistID))
     }
     const updateTask = useCallback((taskID: string, title: string) => {
         dispatch(changeTaskTitleAC(taskID, title, props.todolistID))
-    }, [dispatch])
+    }, [dispatch, props.todolistID])
 
     return (
         <div>

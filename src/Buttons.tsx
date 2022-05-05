@@ -1,5 +1,5 @@
 import React from 'react';
-import {FilterValuesType} from "./App";
+import {FilterValuesType} from "./store/todolist-reducer";
 
 type ButtonsType = {
     changeFilter: (filter: FilterValuesType) => void

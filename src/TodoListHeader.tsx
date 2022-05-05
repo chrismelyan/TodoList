@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css'
-import {FilterValuesType} from "./App";
+import {FilterValuesType} from "./store/todolist-reducer";
 
 type TodoListHeaderPropsType = {
     title: string

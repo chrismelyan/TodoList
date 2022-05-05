@@ -1,29 +1,25 @@
 import React from 'react';
 import TodoListHeader from "./TodoListHeader";
 import TodoListForm from "./TodoListForm";
-import {TodolistType} from "./App";
 import {useDispatch, useSelector} from "react-redux";
-import {removeTodolistAC} from "./store/todolist-reducer";
+import {removeTodolistAC, TodolistDomainType} from "./store/todolist-reducer";
 import {AppRootStoreType} from "./store/store";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
 
 type TodoListPropsType = {
-    todolist: TodolistType
+    todolist: TodolistDomainType
 }
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+
 const TodoList = (props: TodoListPropsType) => {
     const dispatch = useDispatch()
     const todolistID = props.todolist.id
 
     let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistID]);
     if (props.todolist.filter === "active") {
-        tasksForTodolist = tasksForTodolist.filter(t => !t.isDone);
+        tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.New);
     }
     if (props.todolist.filter === "completed") {
-        tasksForTodolist = tasksForTodolist.filter(t => t.isDone);
+        tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed);
     }
 
     const removeTodolist = () => {

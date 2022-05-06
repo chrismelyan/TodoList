@@ -1,10 +1,18 @@
-import React from 'react';
-import TodoListHeader from "./TodoListHeader";
-import TodoListForm from "./TodoListForm";
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {removeTodolistAC, TodolistDomainType} from "./store/todolist-reducer";
+import {
+    changeFilterAC,
+    changeTodolistTitleAC,
+    FilterValuesType,
+    removeTodolistAC,
+    TodolistDomainType
+} from "./store/todolist-reducer";
 import {AppRootStoreType} from "./store/store";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
+import AddItemForm from "./AddItemForm";
+import EditableSpan from "./EditableSpan";
+import {addTaskAC} from "./store/tasks-reducer";
+import Task from "./Task";
 
 type TodoListPropsType = {
     todolist: TodolistDomainType
@@ -21,23 +29,50 @@ const TodoList = (props: TodoListPropsType) => {
     if (props.todolist.filter === "completed") {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed);
     }
+    const changeTodolistTitle = (title: string) => {
+        dispatch(changeTodolistTitleAC(todolistID, title))
+    }
+    const changeFilter = (value: FilterValuesType) => {
+        dispatch(changeFilterAC(todolistID, value))
+    }
+    const addTask = useCallback((title: string) => {
+        dispatch(addTaskAC(title, todolistID))
+    }, [dispatch, todolistID])
 
     const removeTodolist = () => {
         dispatch(removeTodolistAC(todolistID))
     }
 
-
     return (
         <div>
-            <div style={{display: 'flex'}}>
-                <TodoListHeader title={props.todolist.title} filter={props.todolist.filter}/>
-                <button className={'button-sign'} onClick={removeTodolist}>x</button>
+            <div>
+                <h3><EditableSpan value={props.todolist.title} callbackUpdate={changeTodolistTitle}/>
+                    <button onClick={removeTodolist}>x</button>
+                </h3>
+                <AddItemForm callbackAddValue={addTask}/>
             </div>
-            <TodoListForm
-                todolistID={todolistID}
-                tasks={tasksForTodolist}
-                filter={props.todolist.filter}
-            />
+            <ul>
+                {
+                    tasksForTodolist.map(task => <Task
+                        key={task.id}
+                        todolistID={todolistID}
+                        id={task.id}
+                        status={task.status}
+                        title={task.title}
+                    />)
+                }
+            </ul>
+            <div>
+                <button className={props.todolist.filter === 'all' ? 'button-active' : ''}
+                        onClick={() => changeFilter('all')}>All
+                </button>
+                <button className={props.todolist.filter === 'active' ? 'button-active' : ''}
+                        onClick={() => changeFilter('active')}>Active
+                </button>
+                <button className={props.todolist.filter === 'completed' ? 'button-active' : ''}
+                        onClick={() => changeFilter('completed')}>Completed
+                </button>
+            </div>
         </div>
     );
 };

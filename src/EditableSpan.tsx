@@ -1,33 +1,30 @@
 import React, {ChangeEvent, useState} from 'react';
 
 type EditableSpanType = {
-    title: string
+    value: string
     callbackUpdate: (title: string) => void
-    className: string
 }
 
 const EditableSpan = React.memo((props: EditableSpanType) => {
         const [edit, setEdit] = useState<boolean>(false);
         const [title, setTitle] = useState<string>('')
 
-        const onDoubleClickHandler = () => {
+        const activateEditMode = () => {
             setEdit(true)
-            setTitle(props.title)
+            setTitle(props.value)
         }
-
-        const OnBlurHandler = () => {
+        const deactivateEditMode = () => {
             props.callbackUpdate(title)
             setEdit(false)
         }
-
-        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
             setTitle(e.currentTarget.value)
         }
 
         return (
             edit
-                ? <input value={title} onChange={onChangeHandler} autoFocus onBlur={OnBlurHandler}/>
-                : <span className={props.className} onDoubleClick={onDoubleClickHandler}>{props.title}</span>
+                ? <input value={title} onChange={changeTitle} autoFocus onBlur={deactivateEditMode}/>
+                : <span onDoubleClick={activateEditMode}>{props.value}</span>
         );
     }
 );

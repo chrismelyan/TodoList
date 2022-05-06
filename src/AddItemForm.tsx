@@ -1,42 +1,45 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
+import TextField from '@mui/material/TextField';
+import {IconButton} from "@mui/material";
+import {AddBox} from "@mui/icons-material";
 
 type InputFormType = {
     callbackAddValue: (title: string) => void
 }
 const AddItemForm: React.FC<InputFormType> = React.memo(({callbackAddValue}) => {
     const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     const onClickAddTask = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
             callbackAddValue(trimmedTitle)
         } else {
-            setError(true)
+            setError('Title is required')
         }
         setTitle('')
     }
     const onChangeSetTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-        setError(false)
+        setError(null)
     }
     const onKeyPressSetTitle = (e: KeyboardEvent<HTMLInputElement>) => {
         e.key === 'Enter' && onClickAddTask()
     }
 
-    const errorMessage = error && <div style={{color: 'red', fontSize: '10px'}}>Title is required</div>
-    const inputClass = `input ${error ? 'error' : ''}`
-
     return (
         <div>
-            <input
-                value={title}
-                onChange={onChangeSetTitle}
-                onKeyPress={onKeyPressSetTitle}
-                className={inputClass}
-            />
-            <button className={'button-sign'} onClick={onClickAddTask}>+</button>
-            {errorMessage}
+            <TextField value={title}
+                       error={!!error}
+                       onChange={onChangeSetTitle}
+                       onKeyPress={onKeyPressSetTitle}
+                       label={'Title'}
+                       className={error ? 'error' : ''}
+                       helperText={error}/>
+
+            <IconButton color="primary" onClick={onClickAddTask}>
+                <AddBox fontSize='large'/>
+            </IconButton>
         </div>
     );
 })

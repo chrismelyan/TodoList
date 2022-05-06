@@ -13,6 +13,8 @@ import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {addTaskAC} from "./store/tasks-reducer";
 import Task from "./Task";
+import {Button, IconButton, List} from "@mui/material";
+import {Delete} from "@mui/icons-material";
 
 type TodoListPropsType = {
     todolist: TodolistDomainType
@@ -47,11 +49,13 @@ const TodoList = (props: TodoListPropsType) => {
         <div>
             <div>
                 <h3><EditableSpan value={props.todolist.title} callbackUpdate={changeTodolistTitle}/>
-                    <button onClick={removeTodolist}>x</button>
+                    <IconButton onClick={removeTodolist}>
+                        <Delete/>
+                    </IconButton>
                 </h3>
                 <AddItemForm callbackAddValue={addTask}/>
             </div>
-            <ul>
+            <List>
                 {
                     tasksForTodolist.map(task => <Task
                         key={task.id}
@@ -61,17 +65,17 @@ const TodoList = (props: TodoListPropsType) => {
                         title={task.title}
                     />)
                 }
-            </ul>
+            </List>
             <div>
-                <button className={props.todolist.filter === 'all' ? 'button-active' : ''}
+                <Button variant={props.todolist.filter === 'all' ? 'contained' : 'text'} color={'secondary'}
                         onClick={() => changeFilter('all')}>All
-                </button>
-                <button className={props.todolist.filter === 'active' ? 'button-active' : ''}
+                </Button>
+                <Button variant={props.todolist.filter === 'active' ? 'contained' : 'text'} color={'primary'}
                         onClick={() => changeFilter('active')}>Active
-                </button>
-                <button className={props.todolist.filter === 'completed' ? 'button-active' : ''}
+                </Button>
+                <Button variant={props.todolist.filter === 'completed' ? 'contained' : 'text'} color={'inherit'}
                         onClick={() => changeFilter('completed')}>Completed
-                </button>
+                </Button>
             </div>
         </div>
     );

@@ -3,6 +3,8 @@ import {TaskStatuses} from "./api/todolists-api";
 import EditableSpan from "./EditableSpan";
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./store/tasks-reducer";
 import {useDispatch} from "react-redux";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import {Checkbox, IconButton} from "@mui/material";
 
 type TaskPropsType = {
     todolistID: string
@@ -23,8 +25,8 @@ const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
     }, [dispatch, todolistID])
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
         changeStatus(id, e.currentTarget.checked
-                ? TaskStatuses.Completed
-                : TaskStatuses.New)
+            ? TaskStatuses.Completed
+            : TaskStatuses.New)
     }
     const updateTaskHandler = (title: string) => {
         updateTask(id, title)
@@ -32,16 +34,11 @@ const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
 
     return (
         <div>
-            <li key={id}>
-                <div className={'task'}>
-                    <div className={'item'}>
-                        <input type="checkbox" onChange={changeTaskStatus}
-                               checked={status === TaskStatuses.Completed}/>
-                        <EditableSpan value={title} callbackUpdate={updateTaskHandler}/>
-                    </div>
-                    <button className={'button-sign'} onClick={() => removeTask(id)}>x</button>
-                </div>
-            </li>
+            <Checkbox color={'primary'} onChange={changeTaskStatus} checked={status === TaskStatuses.Completed}/>
+            <EditableSpan value={title} callbackUpdate={updateTaskHandler}/>
+            <IconButton onClick={() => removeTask(id)}>
+                <HighlightOffIcon color={'inherit'}/>
+            </IconButton>
         </div>
     );
 };

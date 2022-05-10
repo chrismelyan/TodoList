@@ -1,5 +1,5 @@
-import {todolistsAPI, TodolistType} from "../api/todolists-api";
-import {AppThunkType} from "./store";
+import {todolistsAPI, TodolistType} from "../../api/todolists-api";
+import {AppThunkType} from "../../app/store";
 
 export type TodolistActionType = ReturnType<typeof addTodolistAC>
     | ReturnType<typeof removeTodolistAC>
@@ -35,9 +35,11 @@ export const todolistReducer = (state: TodolistDomainType[] = initialState, acti
 export const addTodolistAC = (todolist: TodolistType) => ({type: "ADD-TODOLIST", todolist} as const)
 export const removeTodolistAC = (todolistID: string) => ({type: "REMOVE-TODOLIST", id: todolistID} as const)
 export const changeTodolistTitleAC = (todolistID: string, title: string) => {
-    return {type: "CHANGE-TODOLIST-TITLE", todolistID, title} as const}
+    return {type: "CHANGE-TODOLIST-TITLE", todolistID, title} as const
+}
 export const changeFilterAC = (todolistID: string, value: FilterValuesType) => {
-    return {type: "CHANGE-FILTER", todolistID, value} as const}
+    return {type: "CHANGE-FILTER", todolistID, value} as const
+}
 export const setTodolistsAC = (todolists: Array<TodolistType>) => ({type: "SET-TODOLISTS", todolists} as const)
 
 // THUNK CREATORS
@@ -47,6 +49,14 @@ export const getTodolistsTC = (): AppThunkType => async dispatch => {
 }
 export const addTodolistTC = (title: string): AppThunkType => async dispatch => {
     const res = await todolistsAPI.createTodolist(title)
-        const newTodo = res.data.data.item
-        dispatch(addTodolistAC(newTodo))
+    const newTodo = res.data.data.item
+    dispatch(addTodolistAC(newTodo))
+}
+export const deleteTodolistTC = (todolistId: string): AppThunkType => async dispatch => {
+    await todolistsAPI.deleteTodolist(todolistId)
+    dispatch(removeTodolistAC(todolistId))
+}
+export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunkType => async dispatch => {
+    await todolistsAPI.updateTodolist(todolistId, title)
+    dispatch(changeTodolistTitleAC(todolistId, title))
 }

@@ -1,18 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
-    changeFilterAC,
-    changeTodolistTitleAC,
-    FilterValuesType,
-    removeTodolistAC,
-    TodolistDomainType
-} from "./store/todolist-reducer";
-import {AppRootStoreType} from "./store/store";
-import {TaskStatuses, TaskType} from "./api/todolists-api";
-import AddItemForm from "./AddItemForm";
-import EditableSpan from "./EditableSpan";
-import {addTaskTC, getTasksTC} from "./store/tasks-reducer";
-import Task from "./Task";
+    changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,
+    FilterValuesType, TodolistDomainType
+} from "../todolist-reducer";
+import {AppRootStoreType} from "../../../app/store";
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
+import AddItemForm from "../../../components/AddItemForm";
+import EditableSpan from "../../../components/EditableSpan";
+import {addTaskTC, getTasksTC} from "../tasks-reducer";
+import Task from "./task/Task";
 import {Button, IconButton, List} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 
@@ -36,20 +33,20 @@ const TodoList = (props: TodoListPropsType) => {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed);
     }
     const changeTodolistTitle = useCallback((title: string) => {
-        dispatch(changeTodolistTitleAC(todolistID, title))
-    }, [dispatch])
+        dispatch(changeTodolistTitleTC(todolistID, title))
+    }, [dispatch, todolistID])
 
     const changeFilter = useCallback((value: FilterValuesType) => {
         dispatch(changeFilterAC(todolistID, value))
-    }, [dispatch])
+    }, [dispatch, todolistID])
 
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskTC(title, todolistID))
+        dispatch(addTaskTC(todolistID, title))
     }, [dispatch, todolistID])
 
     const removeTodolist = useCallback(() => {
-        dispatch(removeTodolistAC(todolistID))
-    },[dispatch])
+        dispatch(deleteTodolistTC(todolistID))
+    },[dispatch, todolistID])
 
     return (
         <div>

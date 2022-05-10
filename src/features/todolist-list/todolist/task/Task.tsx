@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useCallback} from 'react';
-import {TaskStatuses} from "./api/todolists-api";
-import EditableSpan from "./EditableSpan";
-import {changeTaskStatusTC, changeTaskTitleAC, removeTaskTC} from "./store/tasks-reducer";
+import {TaskStatuses} from "../../../../api/todolists-api";
+import EditableSpan from "../../../../components/EditableSpan";
+import {changeTaskStatusTC, changeTaskTitleAC, removeTaskTC} from "../../tasks-reducer";
 import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Checkbox, IconButton} from "@mui/material";
@@ -19,7 +19,7 @@ const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
     }
     const changeStatus = useCallback((taskID: string, status: TaskStatuses) => {
         dispatch(changeTaskStatusTC(todolistID, taskID, status))
-    }, [dispatch])
+    }, [dispatch, todolistID])
 
     const updateTask = useCallback((taskID: string, title: string) => {
         dispatch(changeTaskTitleAC(taskID, title, todolistID))

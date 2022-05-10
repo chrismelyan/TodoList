@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import TodoList from "./TodoList";
-import AddItemForm from "./AddItemForm";
+import TodoList from "../features/todolist-list/todolist/TodoList";
+import AddItemForm from "../components/AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStoreType} from "./store/store";
-import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "./store/todolist-reducer";
+import {AppRootStoreType} from "./store";
+import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "../features/todolist-list/todolist-reducer";
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 
@@ -38,14 +38,14 @@ function App() {
             </Box>
             <Container fixed>
                 <Grid container style={{padding: '30px'}}>
-                    <Paper style={{padding: '20px', background: 'rgb(252, 247, 252, 0.6)'}}>
+                    <Paper style={{padding: '20px', background: 'rgb(255,250,250, 0.9)'}}>
                     <AddItemForm callbackAddValue={addTodolist}/>
                     </Paper>
                 </Grid>
                 <Grid container spacing={3}>
-                    {todolists.map(el => <Grid item>
-                        <Paper style={{padding: '15px', background: 'rgb(252, 247, 252, 0.6)'}} elevation={3}>
-                        <TodoList key={el.id} todolist={el}/>
+                    {todolists.map(el => <Grid key={el.id} item>
+                        <Paper style={{padding: '15px', background: 'rgb(255,250,250, 0.9)'}} elevation={3}>
+                        <TodoList todolist={el} key={el.id}/>
                         </Paper>
                     </Grid>)}
                 </Grid>

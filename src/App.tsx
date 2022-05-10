@@ -1,19 +1,24 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import TodoList from "./TodoList";
 import AddItemForm from "./AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStoreType} from "./store/store";
-import {TodolistDomainType, addTodolistAC} from "./store/todolist-reducer";
+import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "./store/todolist-reducer";
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 
 function App() {
+
+    useEffect(() => {
+        dispatch(getTodolistsTC())
+    }, [])
+
     const dispatch = useDispatch()
     const todolists = useSelector<AppRootStoreType, TodolistDomainType[]>(state => state.todolists)
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistAC(title))
+        dispatch(addTodolistTC(title))
     }, [dispatch])
 
     return (

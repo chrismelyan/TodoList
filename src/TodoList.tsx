@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
     changeFilterAC,
@@ -11,7 +11,7 @@ import {AppRootStoreType} from "./store/store";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
-import {addTaskAC} from "./store/tasks-reducer";
+import {addTaskTC, getTasksTC} from "./store/tasks-reducer";
 import Task from "./Task";
 import {Button, IconButton, List} from "@mui/material";
 import {Delete} from "@mui/icons-material";
@@ -24,6 +24,10 @@ const TodoList = (props: TodoListPropsType) => {
     const dispatch = useDispatch()
     const todolistID = props.todolist.id
 
+    useEffect(() => {
+        dispatch(getTasksTC(todolistID))
+    }, [])
+
     let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistID]);
     if (props.todolist.filter === "active") {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.New);
@@ -31,19 +35,21 @@ const TodoList = (props: TodoListPropsType) => {
     if (props.todolist.filter === "completed") {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed);
     }
-    const changeTodolistTitle = (title: string) => {
+    const changeTodolistTitle = useCallback((title: string) => {
         dispatch(changeTodolistTitleAC(todolistID, title))
-    }
-    const changeFilter = (value: FilterValuesType) => {
+    }, [dispatch])
+
+    const changeFilter = useCallback((value: FilterValuesType) => {
         dispatch(changeFilterAC(todolistID, value))
-    }
+    }, [dispatch])
+
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskAC(title, todolistID))
+        dispatch(addTaskTC(title, todolistID))
     }, [dispatch, todolistID])
 
-    const removeTodolist = () => {
+    const removeTodolist = useCallback(() => {
         dispatch(removeTodolistAC(todolistID))
-    }
+    },[dispatch])
 
     return (
         <div>

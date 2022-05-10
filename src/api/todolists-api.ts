@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// TYPES
 export type TodolistType = {
     id: string
     addedDate: string
@@ -65,6 +66,7 @@ const instance = axios.create({
     }
 })
 
+// api
 export const todolistsAPI = {
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists')

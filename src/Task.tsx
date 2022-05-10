@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {TaskStatuses} from "./api/todolists-api";
 import EditableSpan from "./EditableSpan";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./store/tasks-reducer";
+import {changeTaskStatusTC, changeTaskTitleAC, removeTaskTC} from "./store/tasks-reducer";
 import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Checkbox, IconButton} from "@mui/material";
@@ -15,14 +15,16 @@ type TaskPropsType = {
 const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
     const dispatch = useDispatch()
     const removeTask = (taskID: string) => {
-        dispatch(removeTaskAC(taskID, todolistID))
+        dispatch(removeTaskTC(taskID, todolistID))
     }
-    const changeStatus = (taskID: string, status: TaskStatuses) => {
-        dispatch(changeTaskStatusAC(taskID, status, todolistID))
-    }
+    const changeStatus = useCallback((taskID: string, status: TaskStatuses) => {
+        dispatch(changeTaskStatusTC(todolistID, taskID, status))
+    }, [dispatch])
+
     const updateTask = useCallback((taskID: string, title: string) => {
         dispatch(changeTaskTitleAC(taskID, title, todolistID))
     }, [dispatch, todolistID])
+
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
         changeStatus(id, e.currentTarget.checked
             ? TaskStatuses.Completed

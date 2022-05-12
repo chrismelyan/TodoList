@@ -1,6 +1,7 @@
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolist-reducer";
 import {TaskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
 import {AppRootStoreType, AppThunkType} from "../../app/store";
+import {setErrorAC, setStatusAC} from "../../app/app-reducer";
 
 export type TasksActionsType = ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
@@ -9,6 +10,8 @@ export type TasksActionsType = ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTodolistAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof setTodolistsAC>
+    | ReturnType<typeof setErrorAC>
+    | ReturnType<typeof setStatusAC>
     | ReturnType<typeof removeTodolistAC>;
 
 export type TasksStateType = {
@@ -23,7 +26,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
             action.todolists.forEach(tl => copy[tl.id] = [])
             return copy
         case 'SET-TASKS':
-            return {...state, [action.todolistId]:action.tasks};
+            return {...state, [action.todolistId]: action.tasks};
         case 'REMOVE-TASK':
             return {...state, [action.todolistID]: state[action.todolistID].filter(t => t.id !== action.taskID)};
         case 'ADD-TASK':
@@ -37,7 +40,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
         case 'ADD-TODOLIST':
             return {...state, [action.todolist.id]: []}
         case 'CHANGE-TASK-TITLE':
-            return {...state,
+            return {
+                ...state,
                 [action.todolistID]:
                     state[action.todolistID].map(t => t.id === action.taskID ? {...t, title: action.title} : t)
             }
@@ -49,31 +53,43 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
             return state
     }
 }
-
 // ACTION CREATORS
 export const removeTaskAC = (taskID: string, todolistID: string) => ({type: 'REMOVE-TASK', taskID, todolistID} as const)
 export const addTaskAC = (task: TaskType) => ({type: 'ADD-TASK', task} as const)
 export const changeTaskStatusAC = (todolistID: string, taskID: string, status: TaskStatuses) => {
-    return {type: 'CHANGE-TASK-STATUS', todolistID, taskID, status} as const}
+    return {type: 'CHANGE-TASK-STATUS', todolistID, taskID, status} as const
+}
 export const changeTaskTitleAC = (taskID: string, title: string, todolistID: string) => {
-    return {type: 'CHANGE-TASK-TITLE', taskID, title, todolistID} as const}
+    return {type: 'CHANGE-TASK-TITLE', taskID, title, todolistID} as const
+}
 export const setTasksAC = (tasks: TaskType[], todolistId: string) => {
     return {type: "SET-TASKS", tasks, todolistId} as const
 }
 
 // THUNK CREATORS
 export const getTasksTC = (todolistId: string): AppThunkType => async dispatch => {
+    dispatch(setStatusAC('loading'))
     const res = await todolistsAPI.getTasks(todolistId)
-            dispatch(setTasksAC(res.data.items, todolistId))
+    dispatch(setTasksAC(res.data.items, todolistId))
+    dispatch(setStatusAC('succeeded'))
 }
 export const removeTaskTC = (taskId: string, todolistId: string): AppThunkType => async dispatch => {
     await todolistsAPI.deleteTask(todolistId, taskId)
-        dispatch(removeTaskAC(taskId, todolistId))
+    dispatch(removeTaskAC(taskId, todolistId))
 }
 export const addTaskTC = (todolistId: string, title: string): AppThunkType => async dispatch => {
+    dispatch(setStatusAC('loading'))
     const res = await todolistsAPI.createTask(todolistId, title)
+    if (res.data.resultCode === 0) {
         const newTask = res.data.data.item
         dispatch(addTaskAC(newTask))
+        dispatch(setStatusAC('succeeded'))
+    } else {
+        if (res.data.messages.length) {
+            dispatch(setErrorAC('The title is too long. Max length is 100 symbols.'));
+        }
+        dispatch(setStatusAC('failed'))
+    }
 }
 export const changeTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses): AppThunkType =>
     async (dispatch,
@@ -83,5 +99,5 @@ export const changeTaskStatusTC = (todolistId: string, taskId: string, status: T
         const currentTask = tasksForCurrentTodo.find(t => t.id === taskId)
         const model: any = {...currentTask, status}
         await todolistsAPI.updateTask(todolistId, taskId, model)
-            dispatch(changeTaskStatusAC(todolistId, taskId, status))
+        dispatch(changeTaskStatusAC(todolistId, taskId, status))
     }

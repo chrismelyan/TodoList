@@ -6,8 +6,8 @@ import {
 } from "../todolist-reducer";
 import {AppRootStoreType} from "../../../app/store";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
-import AddItemForm from "../../../components/AddItemForm";
-import EditableSpan from "../../../components/EditableSpan";
+import AddItemForm from "../../../components/AddItemForm/AddItemForm";
+import EditableSpan from "../../../components/EditableSpan/EditableSpan";
 import {addTaskTC, getTasksTC} from "../tasks-reducer";
 import Task from "./task/Task";
 import {Button, IconButton, List} from "@mui/material";

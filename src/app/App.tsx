@@ -1,14 +1,28 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import TodoList from "../features/todolist-list/todolist/TodoList";
-import AddItemForm from "../components/AddItemForm";
+import AddItemForm from "../components/AddItemForm/AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStoreType} from "./store";
 import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "../features/todolist-list/todolist-reducer";
-import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Box,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    LinearProgress,
+    Paper,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {Menu} from "@mui/icons-material";
+import {ErrorSnackbar} from "../components/ErrorSnackBar/ErrorSnackBar";
+import {RequestStatusType} from "./app-reducer";
 
 function App() {
+    const status = useSelector<AppRootStoreType, RequestStatusType>(state => state.app.status);
 
     useEffect(() => {
         dispatch(getTodolistsTC())
@@ -23,6 +37,7 @@ function App() {
 
     return (
         <div className="App">
+            <ErrorSnackbar />
             <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" color={'secondary'}>
                 <Toolbar>
@@ -34,6 +49,7 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {status === 'loading' && <LinearProgress/>}
             </AppBar>
             </Box>
             <Container fixed>

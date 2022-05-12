@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {TaskStatuses} from "../../../../api/todolists-api";
-import EditableSpan from "../../../../components/EditableSpan";
+import EditableSpan from "../../../../components/EditableSpan/EditableSpan";
 import {changeTaskStatusTC, changeTaskTitleAC, removeTaskTC} from "../../tasks-reducer";
 import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';

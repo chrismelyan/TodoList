@@ -1,7 +1,15 @@
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolist-reducer";
 import {TaskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
 import {AppRootStoreType, AppThunkType} from "../../app/store";
-import {setErrorAC, setStatusAC} from "../../app/app-reducer";
+import {AppReducerType, setStatusAC} from "../../app/app-reducer";
+import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+
+export enum ResultCodeStatuses {
+    success = 0,
+    error = 1,
+    captcha = 10
+}
 
 export type TasksActionsType = ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
@@ -10,9 +18,8 @@ export type TasksActionsType = ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTodolistAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof setTodolistsAC>
-    | ReturnType<typeof setErrorAC>
-    | ReturnType<typeof setStatusAC>
-    | ReturnType<typeof removeTodolistAC>;
+    | ReturnType<typeof removeTodolistAC>
+    | AppReducerType;
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -74,22 +81,25 @@ export const getTasksTC = (todolistId: string): AppThunkType => async dispatch =
     dispatch(setStatusAC('succeeded'))
 }
 export const removeTaskTC = (taskId: string, todolistId: string): AppThunkType => async dispatch => {
+    dispatch(setStatusAC('loading'))
     await todolistsAPI.deleteTask(todolistId, taskId)
     dispatch(removeTaskAC(taskId, todolistId))
+    dispatch(setStatusAC('succeeded'))
 }
-export const addTaskTC = (todolistId: string, title: string): AppThunkType => async dispatch => {
+export const addTaskTC = (todolistId: string, title: string): AppThunkType => (dispatch) => {
     dispatch(setStatusAC('loading'))
-    const res = await todolistsAPI.createTask(todolistId, title)
-    if (res.data.resultCode === 0) {
-        const newTask = res.data.data.item
-        dispatch(addTaskAC(newTask))
-        dispatch(setStatusAC('succeeded'))
-    } else {
-        if (res.data.messages.length) {
-            dispatch(setErrorAC('The title is too long. Max length is 100 symbols.'));
+    todolistsAPI.createTask(todolistId, title)
+        .then(res => {
+        if (res.data.resultCode === ResultCodeStatuses.success) {
+            dispatch(addTaskAC(res.data.data.item));
+            dispatch(setStatusAC('succeeded'));
+        } else {
+            handleServerAppError(dispatch, res.data)
         }
-        dispatch(setStatusAC('failed'))
-    }
+    })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
 }
 export const changeTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses): AppThunkType =>
     async (dispatch,

@@ -3,7 +3,7 @@ import './App.css';
 import TodoList from "../features/todolist-list/todolist/TodoList";
 import AddItemForm from "../components/AddItemForm/AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStoreType} from "./store";
+import {AppRootStoreType, useAppSelector} from "./store";
 import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "../features/todolist-list/todolist-reducer";
 import {
     AppBar,
@@ -22,7 +22,7 @@ import {ErrorSnackbar} from "../components/ErrorSnackBar/ErrorSnackBar";
 import {RequestStatusType} from "./app-reducer";
 
 function App() {
-    const status = useSelector<AppRootStoreType, RequestStatusType>(state => state.app.status);
+    const status = useAppSelector<RequestStatusType>(state => state.app.status);
 
     useEffect(() => {
         dispatch(getTodolistsTC())

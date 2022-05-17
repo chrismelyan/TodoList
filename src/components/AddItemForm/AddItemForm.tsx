@@ -2,11 +2,13 @@ import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import TextField from '@mui/material/TextField';
 import {IconButton} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
+import {RequestStatusType} from "../../app/app-reducer";
 
 type InputFormType = {
     callbackAddValue: (title: string) => void
+    entityStatus?: RequestStatusType
 }
-const AddItemForm: React.FC<InputFormType> = React.memo(({callbackAddValue}) => {
+const AddItemForm: React.FC<InputFormType> = React.memo(({callbackAddValue, entityStatus}) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
 
@@ -35,7 +37,8 @@ const AddItemForm: React.FC<InputFormType> = React.memo(({callbackAddValue}) => 
                        onKeyPress={onKeyPressSetTitle}
                        label={'Title'}
                        className={error ? 'error' : ''}
-                       helperText={error}/>
+                       helperText={error}
+                       disabled={entityStatus === 'loading'}/>
 
             <IconButton color="primary" onClick={onClickAddTask}>
                 <AddBox fontSize='large'/>

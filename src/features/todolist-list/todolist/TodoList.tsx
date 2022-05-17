@@ -12,6 +12,7 @@ import {addTaskTC, getTasksTC} from "../tasks-reducer";
 import Task from "./task/Task";
 import {Button, IconButton, List} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import {RequestStatusType} from "../../../app/app-reducer";
 
 type TodoListPropsType = {
     todolist: TodolistDomainType
@@ -20,6 +21,7 @@ type TodoListPropsType = {
 const TodoList = (props: TodoListPropsType) => {
     const dispatch = useDispatch()
     const todolistID = props.todolist.id
+    const entityStatus = useSelector<AppRootStoreType, RequestStatusType>(state => state.app.status);
 
     useEffect(() => {
         dispatch(getTasksTC(todolistID))
@@ -52,11 +54,11 @@ const TodoList = (props: TodoListPropsType) => {
         <div>
             <div>
                 <h3><EditableSpan value={props.todolist.title} callbackUpdate={changeTodolistTitle}/>
-                    <IconButton onClick={removeTodolist}>
+                    <IconButton onClick={removeTodolist} disabled={entityStatus === 'loading'}>
                         <Delete/>
                     </IconButton>
                 </h3>
-                <AddItemForm callbackAddValue={addTask}/>
+                <AddItemForm callbackAddValue={addTask} entityStatus={entityStatus}/>
             </div>
             <List>
                 {

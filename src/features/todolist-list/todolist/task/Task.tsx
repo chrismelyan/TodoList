@@ -5,14 +5,16 @@ import {changeTaskStatusTC, changeTaskTitleAC, removeTaskTC} from "../../tasks-r
 import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Checkbox, IconButton} from "@mui/material";
+import {RequestStatusType} from "../../../../app/app-reducer";
 
 type TaskPropsType = {
     todolistID: string
     id: string
     status: TaskStatuses
     title: string
+    entityStatus: RequestStatusType
 }
-const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
+const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title, entityStatus}) => {
     const dispatch = useDispatch()
     const removeTask = (taskID: string) => {
         dispatch(removeTaskTC(taskID, todolistID))
@@ -37,7 +39,7 @@ const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title}) => {
     return (
         <div>
             <Checkbox color={'primary'} onChange={changeTaskStatus} checked={status === TaskStatuses.Completed}/>
-            <EditableSpan value={title} callbackUpdate={updateTaskHandler}/>
+            <EditableSpan entityStatus={entityStatus} value={title} callbackUpdate={updateTaskHandler}/>
             <IconButton onClick={() => removeTask(id)}>
                 <HighlightOffIcon color={'inherit'}/>
             </IconButton>

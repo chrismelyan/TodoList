@@ -1,39 +1,25 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import './App.css';
-import TodoList from "../features/todolist-list/todolist/TodoList";
-import AddItemForm from "../components/AddItemForm/AddItemForm";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStoreType, useAppSelector} from "./store";
-import {TodolistDomainType, getTodolistsTC, addTodolistTC} from "../features/todolist-list/todolist-reducer";
+import {useAppSelector} from "./store";
 import {
     AppBar,
     Box,
     Button,
     Container,
-    Grid,
     IconButton,
     LinearProgress,
-    Paper,
     Toolbar,
     Typography
 } from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import {ErrorSnackbar} from "../components/ErrorSnackBar/ErrorSnackBar";
 import {RequestStatusType} from "./app-reducer";
+import {Navigate, Route, Routes} from "react-router-dom";
+import TodolistsList from "../features/todolist-list/TodolistsList";
+import {Login} from "../components/Login/Login";
 
 function App() {
     const status = useAppSelector<RequestStatusType>(state => state.app.status);
-
-    useEffect(() => {
-        dispatch(getTodolistsTC())
-    }, [])
-
-    const dispatch = useDispatch()
-    const todolists = useSelector<AppRootStoreType, TodolistDomainType[]>(state => state.todolists)
-
-    const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistTC(title))
-    }, [dispatch])
 
     return (
         <div className="App">
@@ -53,18 +39,12 @@ function App() {
             </AppBar>
             </Box>
             <Container fixed>
-                <Grid container style={{padding: '30px'}}>
-                    <Paper style={{padding: '20px', background: 'rgb(255,250,250, 0.9)'}}>
-                    <AddItemForm callbackAddValue={addTodolist}/>
-                    </Paper>
-                </Grid>
-                <Grid container spacing={3}>
-                    {todolists.map(el => <Grid key={el.id} item>
-                        <Paper style={{padding: '15px', background: 'rgb(255,250,250, 0.9)'}} elevation={3}>
-                        <TodoList todolist={el} key={el.id}/>
-                        </Paper>
-                    </Grid>)}
-                </Grid>
+                <Routes>
+                    <Route path={'/'} element={<TodolistsList/>}/>
+                    <Route path={'login'} element={<Login/>}/>
+                    <Route path={'404'} element={<h1 style={{textAlign: 'center', color: 'white'}}>404 page not found</h1>}/>
+                    <Route path={'*'} element={<Navigate to={'404'}/>}/>
+                </Routes>
             </Container>
         </div>
     );

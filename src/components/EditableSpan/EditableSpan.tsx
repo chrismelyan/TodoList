@@ -1,9 +1,11 @@
 import React, {ChangeEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
+import {RequestStatusType} from "../../app/app-reducer";
 
 type EditableSpanType = {
     value: string
     callbackUpdate: (title: string) => void
+    entityStatus: RequestStatusType
 }
 
 const EditableSpan = React.memo((props: EditableSpanType) => {

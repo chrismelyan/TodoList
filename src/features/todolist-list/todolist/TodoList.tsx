@@ -53,7 +53,10 @@ const TodoList = (props: TodoListPropsType) => {
     return (
         <div>
             <div>
-                <h3><EditableSpan value={props.todolist.title} callbackUpdate={changeTodolistTitle}/>
+                <h3><EditableSpan
+                    value={props.todolist.title}
+                    callbackUpdate={changeTodolistTitle}
+                    entityStatus={entityStatus}/>
                     <IconButton onClick={removeTodolist} disabled={entityStatus === 'loading'}>
                         <Delete/>
                     </IconButton>
@@ -68,6 +71,7 @@ const TodoList = (props: TodoListPropsType) => {
                         id={task.id}
                         status={task.status}
                         title={task.title}
+                        entityStatus={entityStatus}
                     />)
                 }
             </List>

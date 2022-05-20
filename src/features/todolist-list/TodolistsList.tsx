@@ -1,22 +1,30 @@
 import React, {useCallback, useEffect} from 'react';
 import {addTodolistTC, getTodolistsTC, TodolistDomainType} from "./todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStoreType} from "../../app/store";
+import {AppRootStoreType, useAppSelector} from "../../app/store";
 import {Grid, Paper} from "@mui/material";
 import TodoList from "./todolist/TodoList";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
+import {useNavigate} from "react-router-dom";
 
 const TodolistsList = () => {
-    useEffect(() => {
-        dispatch(getTodolistsTC())
-    }, [])
-
     const dispatch = useDispatch()
-    const todolists = useSelector<AppRootStoreType, TodolistDomainType[]>(state => state.todolists)
+    const todolists = useSelector<AppRootStoreType, TodolistDomainType[]>(state => state.todolists);
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(isLoggedIn) {
+            dispatch(getTodolistsTC())
+        } else {
+            navigate('login')
+        }
+    }, [isLoggedIn])
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistTC(title))
+            dispatch(addTodolistTC(title))
     }, [dispatch])
+
     return (
         <div>
             <Grid container style={{padding: '30px'}}>

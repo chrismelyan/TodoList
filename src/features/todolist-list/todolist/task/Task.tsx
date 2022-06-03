@@ -24,7 +24,7 @@ const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title, entitySta
     }, [dispatch, todolistID])
 
     const updateTask = useCallback((taskID: string, title: string) => {
-        dispatch(changeTaskTitleAC(taskID, title, todolistID))
+        dispatch(changeTaskTitleAC({taskID: taskID, title:title, todolistID: todolistID}))
     }, [dispatch, todolistID])
 
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {

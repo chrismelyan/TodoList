@@ -5,7 +5,7 @@ import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {Dispatch} from "redux";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolist-reducer";
+import {addTodolistAC, clearDataAC, removeTodolistAC, setTodolistsAC} from "./todolist-reducer";
 
 export enum ResultCodeStatuses {
     success = 0,
@@ -60,6 +60,9 @@ const slice = createSlice({
         });
         builder.addCase(setTodolistsAC, (state, action) => {
             action.payload.todolists.forEach(t => state[t.id] = [])
+        });
+        builder.addCase(clearDataAC, (state, action) => {
+            return {}
         })
     }
 })

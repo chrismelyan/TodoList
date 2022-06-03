@@ -22,3 +22,6 @@ export type AppRootStoreType = ReturnType<typeof rootReducer>
 
 // useAppSelector - hook/container with already an applied type of the whole app. No need app type in useSelector now.
 export const useAppSelector: TypedUseSelectorHook<AppRootStoreType> = useSelector
+
+//@ts-ignore
+window.store = store

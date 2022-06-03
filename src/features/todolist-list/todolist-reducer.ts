@@ -1,6 +1,6 @@
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {RequestStatusType, setStatusAC} from "../../app/app-reducer";
-import {ResultCodeStatuses} from "./tasks-reducer";
+import {getTasksTC, ResultCodeStatuses} from "./tasks-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
@@ -45,6 +45,9 @@ const slice = createSlice({
             // state.map(el => el.id === action.payload.todolistId ? {...el, entityStatus: action.payload.status} : el);
             const index = state.findIndex(el => el.id === action.payload.todolistID);
             state[index].entityStatus = action.payload.status;
+        },
+        clearDataAC(state, action: PayloadAction) {
+            return []
         }
     }
 })
@@ -55,16 +58,22 @@ export const {addTodolistAC,
     setTodolistsAC,
     changeTodolistEntityStatusAC,
     changeTodolistTitleAC,
-    changeFilterAC} = slice.actions;
+    changeFilterAC, clearDataAC} = slice.actions;
 
 // THUNK CREATORS
 export const getTodolistsTC = () =>
-    (dispatch: Dispatch) => {
+    (dispatch: any) => {
         dispatch(setStatusAC({status: 'loading'}))
         todolistsAPI.getTodolist()
             .then(data => {
                 dispatch(setTodolistsAC({todolists: data.data}))
                 dispatch(setStatusAC({status: 'succeeded'}))
+                return data.data
+            })
+            .then(todos => {
+                todos.forEach(t => {
+                    dispatch(getTasksTC(t.id))
+                })
             })
             .catch(err => {
                 handleServerNetworkError(dispatch, err.message)

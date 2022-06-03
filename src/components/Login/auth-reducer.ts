@@ -5,6 +5,7 @@ import {AxiosError} from "axios";
 import {ResultCodeStatuses} from "../../features/todolist-list/tasks-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
+import {clearDataAC} from "../../features/todolist-list/todolist-reducer";
 
 const initialState = {
     isLoggedIn: false
@@ -48,6 +49,7 @@ export const logoutTC = () =>
                 if (res.data.resultCode === ResultCodeStatuses.success) {
                     dispatch(setIsLoggedInAC({value: false}));
                     dispatch(setStatusAC({status: 'succeeded'}));
+                    dispatch(clearDataAC());
                 } else {
                     handleServerAppError(dispatch, res.data)
                 }

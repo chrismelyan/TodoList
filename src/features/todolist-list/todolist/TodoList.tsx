@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
     changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,
@@ -8,7 +8,7 @@ import {AppRootStoreType} from "../../../app/store";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import AddItemForm from "../../../components/AddItemForm/AddItemForm";
 import EditableSpan from "../../../components/EditableSpan/EditableSpan";
-import {addTaskTC, getTasksTC} from "../tasks-reducer";
+import {addTaskTC} from "../tasks-reducer";
 import Task from "./task/Task";
 import {Button, IconButton, List} from "@mui/material";
 import {Delete} from "@mui/icons-material";
@@ -22,10 +22,6 @@ const TodoList = (props: TodoListPropsType) => {
     const dispatch = useDispatch()
     const todolistID = props.todolist.id
     const entityStatus = useSelector<AppRootStoreType, RequestStatusType>(state => state.app.status);
-
-    useEffect(() => {
-        dispatch(getTasksTC(todolistID))
-    }, [])
 
     let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistID]);
     if (props.todolist.filter === "active") {

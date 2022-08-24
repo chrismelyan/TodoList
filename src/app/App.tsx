@@ -59,8 +59,8 @@ function App() {
             </Box>
             <Container fixed>
                 <Routes>
-                    <Route path={'login'} element={<Login/>}/>
                     <Route path={'/'} element={<TodolistsList/>}/>
+                    <Route path={'login'} element={<Login/>}/>
                     <Route path={'404'} element={<h1 style={{textAlign: 'center', color: 'white'}}>404 page not found</h1>}/>
                     <Route path={'*'} element={<Navigate to={'404'}/>}/>
                 </Routes>

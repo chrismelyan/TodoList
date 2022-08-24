@@ -17,7 +17,7 @@ const TodolistsList = () => {
         if(isLoggedIn) {
             dispatch(getTodolistsTC())
         } else {
-            navigate('login')
+            navigate('/login')
         }
     }, [isLoggedIn])
 

@@ -19,7 +19,7 @@ const TodolistsList = () => {
         } else {
             navigate('/login')
         }
-    }, [isLoggedIn])
+    }, [navigate, dispatch, isLoggedIn])
 
     const addTodolist = useCallback((title: string) => {
             dispatch(addTodolistTC(title))

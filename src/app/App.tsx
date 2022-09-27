@@ -31,7 +31,7 @@ function App() {
 
     useEffect(() => {
             dispatch(initializedAppTC())
-    }, [dispatch])
+    }, [])
 
     if (!isInitialized) {
         return <div

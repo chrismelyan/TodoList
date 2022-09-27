@@ -3,109 +3,116 @@ import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    tasksReducer
+    tasksReducer, TasksStateType
 } from './tasks-reducer';
-import {TasksStateType} from '../../app/App';
 import {addTodolistAC, removeTodolistAC} from "./todolist-reducer";
+import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+
+let startState: TasksStateType = {}
+beforeEach(() => {
+        startState = {
+            "todolistId1": [
+                {
+                    description: '', title: 'CSS', completed: false, status: TaskStatuses.New,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '1', todoListId: 'todolistId1',
+                    order: 0, addedDate: ''
+                },
+                {
+                    description: '', title: 'JS', completed: true, status: TaskStatuses.InProgress,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '2', todoListId: 'todolistId1',
+                    order: 0, addedDate: ''
+                },
+                {
+                    description: '', title: 'React', completed: true, status: TaskStatuses.New,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '3', todoListId: 'todolistId1',
+                    order: 0, addedDate: ''
+                },
+            ],
+            "todolistId2": [
+                {
+                    description: '', title: 'bread', completed: false, status: TaskStatuses.New,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '1', todoListId: 'todolistId2',
+                    order: 0, addedDate: ''
+                },
+                {
+                    description: '', title: 'milk', completed: true, status: TaskStatuses.InProgress,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '2', todoListId: 'todolistId2',
+                    order: 0, addedDate: ''
+                },
+                {
+                    description: '', title: 'corn', completed: false, status: TaskStatuses.InProgress,
+                    priority: TaskPriorities.Hi, startDate: '', deadline: '', id: '3', todoListId: 'todolistId2',
+                    order: 0, addedDate: ''
+                },
+            ]
+        }
+    }
+)
 
 test('correct task should be deleted from correct array', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
 
-    const action = removeTaskAC("2", "todolistId2");
+    const action = removeTaskAC({taskID: "2", todolistID: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState).toEqual({
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    });
+    expect(endState['todolistId1'].length).toBe(3);
+    expect(endState['todolistId2'].length).toBe(2);
+    expect(endState['todolistId2'].every(t => t.id != '2')).toBeTruthy();
 
 });
 
 test('correct task should be added to correct array', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
 
-    const action = addTaskAC("juice", "todolistId2");
+    let task = {
+        description: '',
+        title: 'juice',
+        completed: false,
+        status: TaskStatuses.New,
+        priority: TaskPriorities.Hi,
+        startDate: '',
+        deadline: '',
+        id: '4',
+        todoListId: 'todolistId2',
+        order: 0,
+        addedDate: ''
+    }
+
+    const action = addTaskAC(task);
 
     const endState = tasksReducer(startState, action)
 
     expect(endState["todolistId1"].length).toBe(3);
     expect(endState["todolistId2"].length).toBe(4);
     expect(endState["todolistId2"][0].id).toBeDefined();
-    expect(endState["todolistId2"][0].title).toBe("bread");
-    expect(endState["todolistId2"][0].isDone).toBe(false);
+    expect(endState["todolistId2"][0].title).toBe("juice");
+    expect(endState["todolistId2"][0].completed).toBe(false);
 });
 
 test('status of specified task should be changed', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
 
-    const action = changeTaskStatusAC("2", false, "todolistId2");
+    const action = changeTaskStatusAC({
+        taskID: "2",
+        status: TaskStatuses.InProgress,
+        todolistID: "todolistId2"
+    });
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState["todolistId2"][1].isDone).toBe(false);
-    expect(endState["todolistId2"][2].isDone).toBe(false);
-    expect(endState["todolistId1"][1].isDone).toBe(true);
+    expect(endState["todolistId2"][1].status).toBe(TaskStatuses.InProgress);
+    expect(endState["todolistId2"][2].status).toBe(TaskStatuses.InProgress);
+    expect(endState["todolistId1"][1].status).toBe(TaskStatuses.InProgress);
 });
 
 test('new array should be added when new todolist is added', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
-
-    const action = addTodolistAC("new todolist");
+    const todolist = {
+        id: 'todolistId3',
+        title: 'new todolist',
+        order: 0,
+        addedDate: ''
+    }
+    const action = addTodolistAC(todolist);
 
     const endState = tasksReducer(startState, action)
-
 
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k !== "todolistId1" && k !== "todolistId2");
@@ -118,51 +125,25 @@ test('new array should be added when new todolist is added', () => {
 });
 
 test('title of specified task should be changed', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
-
-    const action = changeTaskTitleAC("2", 'chicken', "todolistId2");
+    const action = changeTaskTitleAC({taskID: "2", title: 'chicken', todolistID: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
     expect(endState["todolistId2"][1].title).toBe("chicken");
-    expect(endState["todolistId2"][2].title).toBe("tea");
+    expect(endState["todolistId2"][2].title).toBe("corn");
     expect(endState["todolistId1"][1].title).toBe("JS");
 });
 
 test('property with todolistId should be deleted', () => {
-    const startState: TasksStateType = {
-        "todolistId1": [
-            { id: "1", title: "CSS", isDone: false },
-            { id: "2", title: "JS", isDone: true },
-            { id: "3", title: "React", isDone: false }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", isDone: false },
-            { id: "2", title: "milk", isDone: true },
-            { id: "3", title: "tea", isDone: false }
-        ]
-    };
-
-    const action = removeTodolistAC("todolistId2");
+    const action = removeTodolistAC({todolistID: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
-
 
     const keys = Object.keys(endState);
 
     expect(keys.length).toBe(1);
-    expect(endState["todolistId2"]).not.toBeUndefined();
+    expect(endState["todolistId2"]).not.toBeDefined();
 });
+
 
 

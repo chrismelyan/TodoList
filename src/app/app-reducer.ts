@@ -7,6 +7,7 @@ import {Dispatch} from "redux";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type InitialAppStateType = typeof initialState
 
 const initialState = {
     status: 'idle' as RequestStatusType,

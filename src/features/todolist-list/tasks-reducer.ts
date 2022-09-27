@@ -30,8 +30,8 @@ const slice = createSlice({
                 tasks.splice(index, 1);
             }
         },
-        addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
-            state[action.payload.task.todoListId].unshift(action.payload.task);
+        addTaskAC(state, action: PayloadAction<TaskType>) {
+            state[action.payload.todoListId].unshift(action.payload);
         },
         changeTaskStatusAC(state, action: PayloadAction<{ todolistID: string, taskID: string, status: TaskStatuses }>) {
             const tasks = state[action.payload.todolistID];
@@ -53,7 +53,7 @@ const slice = createSlice({
     },
     extraReducers(builder) {
         builder.addCase(addTodolistAC, (state, action) => {
-            state[action.payload.todolist.id] = [];
+            state[action.payload.id] = [];
         });
         builder.addCase(removeTodolistAC, (state, action) => {
             delete state[action.payload.todolistID];
@@ -100,7 +100,7 @@ export const addTaskTC = (todolistId: string, title: string) =>
         todolistsAPI.createTask(todolistId, title)
             .then(res => {
                 if (res.data.resultCode === ResultCodeStatuses.success) {
-                    dispatch(addTaskAC({task: res.data.data.item}));
+                    dispatch(addTaskAC(res.data.data.item));
                     dispatch(setStatusAC({status: 'succeeded'}));
                 } else {
                     handleServerAppError(dispatch, res.data)

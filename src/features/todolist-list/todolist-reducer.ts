@@ -18,8 +18,8 @@ const slice = createSlice({
     name: 'todolists',
     initialState: initialState,
     reducers: {
-        addTodolistAC(state, action: PayloadAction<{todolist: TodolistType}>) {
-            state.unshift({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
+        addTodolistAC(state, action: PayloadAction<TodolistType>) {
+            state.unshift({...action.payload, filter: 'all', entityStatus: 'idle'})
         },
         removeTodolistAC(state, action: PayloadAction<{todolistID: string}>) {
             // state.filter(el => el.id !== action.payload.todolistID);
@@ -85,7 +85,7 @@ export const addTodolistTC = (title: string) =>
         todolistsAPI.createTodolist(title)
             .then(res => {
                 if (res.data.resultCode === ResultCodeStatuses.success) {
-                    dispatch(addTodolistAC({todolist: res.data.data.item}))
+                    dispatch(addTodolistAC(res.data.data.item))
                     dispatch(setStatusAC({status: 'succeeded'}))
                 } else {
                     handleServerAppError(dispatch, res.data)

@@ -1,8 +1,7 @@
 import {
     addTaskAC,
     changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
+    changeTaskTitleAC, removeTaskTC,
     tasksReducer, TasksStateType
 } from './tasks-reducer';
 import {addTodolistAC, removeTodolistAC} from "./todolist-reducer";
@@ -50,8 +49,8 @@ beforeEach(() => {
 )
 
 test('correct task should be deleted from correct array', () => {
-
-    const action = removeTaskAC({taskID: "2", todolistID: "todolistId2"});
+    const params = {taskId: "2", todolistId: "todolistId2"}
+    const action = removeTaskTC.fulfilled(params, 'requiredID', params);
 
     const endState = tasksReducer(startState, action)
 
@@ -125,7 +124,7 @@ test('new array should be added when new todolist is added', () => {
 });
 
 test('title of specified task should be changed', () => {
-    const action = changeTaskTitleAC({taskID: "2", title: 'chicken', todolistID: "todolistId2"});
+    const action = changeTaskTitleAC({taskID: "2", title: 'chicken', todolistId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 

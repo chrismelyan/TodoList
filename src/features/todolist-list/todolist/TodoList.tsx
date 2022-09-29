@@ -20,10 +20,10 @@ type TodoListPropsType = {
 
 const TodoList = (props: TodoListPropsType) => {
     const dispatch = useDispatch()
-    const todolistID = props.todolist.id
+    const todolistId = props.todolist.id
     const entityStatus = useSelector<AppRootStoreType, RequestStatusType>(state => state.app.status);
 
-    let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistID]);
+    let tasksForTodolist = useSelector<AppRootStoreType, TaskType[]>(state => state.tasks[todolistId]);
     if (props.todolist.filter === "active") {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.New);
     }
@@ -31,20 +31,20 @@ const TodoList = (props: TodoListPropsType) => {
         tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed);
     }
     const changeTodolistTitle = useCallback((title: string) => {
-        dispatch(changeTodolistTitleTC(todolistID, title))
-    }, [dispatch, todolistID])
+        dispatch(changeTodolistTitleTC(todolistId, title))
+    }, [dispatch, todolistId])
 
     const changeFilter = useCallback((value: FilterValuesType) => {
-        dispatch(changeFilterAC({todolistID, value}))
-    }, [dispatch, todolistID])
+        dispatch(changeFilterAC({todolistId, value}))
+    }, [dispatch, todolistId])
 
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskTC(todolistID, title))
-    }, [dispatch, todolistID])
+        dispatch(addTaskTC(todolistId, title))
+    }, [dispatch, todolistId])
 
     const removeTodolist = useCallback(() => {
-        dispatch(deleteTodolistTC(todolistID))
-    },[dispatch, todolistID])
+        dispatch(deleteTodolistTC(todolistId))
+    },[dispatch, todolistId])
 
     return (
         <div>
@@ -63,7 +63,7 @@ const TodoList = (props: TodoListPropsType) => {
                 {
                     tasksForTodolist.map(task => <Task
                         key={task.id}
-                        todolistID={todolistID}
+                        todolistId={todolistId}
                         id={task.id}
                         status={task.status}
                         title={task.title}

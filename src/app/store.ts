@@ -3,7 +3,7 @@ import {todolistReducer} from "../features/todolist-list/todolist-reducer";
 import {tasksReducer} from "../features/todolist-list/tasks-reducer";
 import thunk from 'redux-thunk'
 import {appReducer} from "./app-reducer";
-import {TypedUseSelectorHook, useSelector} from "react-redux";
+import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {authReducer} from "../components/Login/auth-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 
@@ -22,6 +22,9 @@ export type AppRootStoreType = ReturnType<typeof rootReducer>
 
 // useAppSelector - hook/container with already an applied type of the whole app. No need app type in useSelector now.
 export const useAppSelector: TypedUseSelectorHook<AppRootStoreType> = useSelector
+
+type AppDispatchType = typeof store.dispatch
+export const useAppDispatch = () => useDispatch<AppDispatchType>()
 
 //@ts-ignore
 window.store = store

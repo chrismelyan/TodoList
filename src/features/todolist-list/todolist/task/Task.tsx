@@ -8,24 +8,24 @@ import {Checkbox, IconButton} from "@mui/material";
 import {RequestStatusType} from "../../../../app/app-reducer";
 
 type TaskPropsType = {
-    todolistID: string
+    todolistId: string
     id: string
     status: TaskStatuses
     title: string
     entityStatus: RequestStatusType
 }
-const Task: React.FC<TaskPropsType> = ({todolistID, id, status, title, entityStatus}) => {
+const Task: React.FC<TaskPropsType> = ({todolistId, id, status, title, entityStatus}) => {
     const dispatch = useDispatch()
     const removeTask = (taskID: string) => {
-        dispatch(removeTaskTC(taskID, todolistID))
+        dispatch(removeTaskTC({taskId: taskID, todolistId: todolistId}))
     }
     const changeStatus = useCallback((taskID: string, status: TaskStatuses) => {
-        dispatch(changeTaskStatusTC(todolistID, taskID, status))
-    }, [dispatch, todolistID])
+        dispatch(changeTaskStatusTC(todolistId, taskID, status))
+    }, [dispatch, todolistId])
 
     const updateTask = useCallback((taskID: string, title: string) => {
-        dispatch(changeTaskTitleAC({taskID: taskID, title:title, todolistID: todolistID}))
-    }, [dispatch, todolistID])
+        dispatch(changeTaskTitleAC({taskID, title, todolistId}))
+    }, [dispatch, todolistId])
 
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
         changeStatus(id, e.currentTarget.checked

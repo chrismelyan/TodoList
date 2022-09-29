@@ -39,7 +39,7 @@ export const initializedAppTC = () =>
         dispatch(setStatusAC({status: 'loading'}))
         authAPI.me().then(res => {
             if (res.data.resultCode === ResultCodeStatuses.success) {
-                dispatch(setIsLoggedInAC({value: true}));
+                dispatch(setIsLoggedInAC({isLoggedIn: true}));
                 dispatch(setStatusAC({status: 'succeeded'}));
             } else {
                 handleServerAppError(dispatch, res.data)

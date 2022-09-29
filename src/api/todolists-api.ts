@@ -42,9 +42,11 @@ type UpdateTaskType = {
     startDate: string
     deadline: string
 }
+export type FieldsErrorType = {field: string, error: string}
 export type ResponseType<D> = {
     resultCode: number
     messages: Array<string>
+    fieldsErrors?: Array<FieldsErrorType>
     data: D
 }
 type GetTasksResponseType = {

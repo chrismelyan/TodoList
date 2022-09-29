@@ -33,9 +33,9 @@ const slice = createSlice({
             const index = state.findIndex(el => el.id === action.payload.todolistID);
             state[index].title = action.payload.title;
         },
-        changeFilterAC(state, action: PayloadAction<{todolistID: string, value: FilterValuesType}>) {
+        changeFilterAC(state, action: PayloadAction<{todolistId: string, value: FilterValuesType}>) {
             // state.map(el => el.id === action.payload.todolistID ? {...el, filter: action.payload.value} : el);
-            const index = state.findIndex(el => el.id === action.payload.todolistID);
+            const index = state.findIndex(el => el.id === action.payload.todolistId);
             state[index].filter= action.payload.value;
         },
         setTodolistsAC(state, action: PayloadAction<{todolists: Array<TodolistType>}>) {

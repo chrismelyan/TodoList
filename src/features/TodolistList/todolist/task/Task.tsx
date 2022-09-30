@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import EditableSpan from "../../../../components/EditableSpan/EditableSpan";
-import {removeTaskTC, updateTaskTC} from "../../tasks-reducer";
+import {removeTaskTC, updateTaskTC} from "./tasks-reducer";
 import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Checkbox, IconButton} from "@mui/material";

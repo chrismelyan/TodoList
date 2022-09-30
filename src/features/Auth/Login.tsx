@@ -9,8 +9,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {Paper} from "@mui/material";
 import {FormikHelpers, useFormik} from "formik";
-import {loginTC} from "./auth-reducer";
-import {useAppDispatch} from "../../app/store";
 import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {authSelectors} from "./index";

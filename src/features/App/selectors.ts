@@ -1,4 +1,4 @@
-import {AppRootStoreType} from "../../app/store";
+import {AppRootStoreType} from "../../utils/types";
 
 export const selectStatus = (state: AppRootStoreType) => state.app.status
 export const selectIsInitialized = (state: AppRootStoreType) => state.app.isInitialized

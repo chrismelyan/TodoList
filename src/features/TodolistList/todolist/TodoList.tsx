@@ -3,10 +3,10 @@ import {useDispatch} from "react-redux";
 import {
     changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,
     FilterValuesType, TodolistDomainType
-} from "../todolist-reducer";
+} from "./todolist-reducer";
 import AddItemForm from "../../../components/AddItemForm/AddItemForm";
 import EditableSpan from "../../../components/EditableSpan/EditableSpan";
-import {addTaskTC} from "../tasks-reducer";
+import {addTaskTC} from "./task/tasks-reducer";
 import Task from "./task/Task";
 import {Button, IconButton, List} from "@mui/material";
 import {Delete} from "@mui/icons-material";

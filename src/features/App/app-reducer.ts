@@ -1,9 +1,9 @@
 import {authAPI} from "../../api/todolists-api";
-import {ResultCodeStatuses} from "../TodolistList/tasks-reducer";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/error-utils";
 import {authActions} from "../Auth";
 import {appActions} from "../CommonActions/App";
+import {ResultCodeStatuses} from "../../api/types";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export type InitialStateType = {

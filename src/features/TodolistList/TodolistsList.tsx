@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react';
-import {addTodolistTC, getTodolistsTC} from "./todolist-reducer";
 import {useSelector} from "react-redux";
 import {Grid, Paper} from "@mui/material";
 import TodoList from "./todolist/TodoList";

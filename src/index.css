@@ -6,6 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: url('assets/images/backgound.jpg');
+  background-size: cover;
+  min-height: 100vh;
 }
 
 code {

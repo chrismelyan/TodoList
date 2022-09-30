@@ -1,16 +1,20 @@
 import React, {useCallback, useEffect} from 'react';
-import {addTodolistTC, getTodolistsTC, TodolistDomainType} from "./todolist-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStoreType, useAppSelector} from "../../app/store";
+import {addTodolistTC, getTodolistsTC} from "./todolist-reducer";
+import {useSelector} from "react-redux";
 import {Grid, Paper} from "@mui/material";
 import TodoList from "./todolist/TodoList";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {useNavigate} from "react-router-dom";
+import {authSelectors} from "../Auth";
+import {todolistSelectors} from "./index";
+import {useAppDispatch} from "../../utils/redux-utils";
 
 const TodolistsList = () => {
-    const dispatch = useDispatch()
-    const todolists = useSelector<AppRootStoreType, TodolistDomainType[]>(state => state.todolists);
-    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+    const dispatch = useAppDispatch()
+
+    const todolists = useSelector(todolistSelectors.selectTodolists);
+    const tasks = useSelector(todolistSelectors.selectTasks);
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -33,11 +37,15 @@ const TodolistsList = () => {
                 </Paper>
             </Grid>
             <Grid container spacing={3}>
-                {todolists.map(el => <Grid key={el.id} item>
-                        <Paper style={{padding: '15px', background: 'rgb(255,250,250, 0.9)'}} elevation={3}>
-                            <TodoList todolist={el} key={el.id}/>
-                        </Paper>
-                    </Grid>
+                {todolists.map(el => {
+                    let todolistTasks = tasks[el.id]
+
+                    return <Grid key={el.id} item>
+                            <Paper style={{padding: '15px', background: 'rgb(255,250,250, 0.9)'}} elevation={3}>
+                                <TodoList todolist={el} key={el.id} tasks={todolistTasks}/>
+                            </Paper>
+                        </Grid>
+                    }
                 )}
             </Grid>
         </div>

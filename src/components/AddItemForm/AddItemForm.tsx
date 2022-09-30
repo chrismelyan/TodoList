@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import TextField from '@mui/material/TextField';
 import {IconButton} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
-import {RequestStatusType} from "../../app/app-reducer";
+import {RequestStatusType} from "../../features/App/app-reducer";
 
 type InputFormType = {
     callbackAddValue: (title: string) => void

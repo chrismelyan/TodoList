@@ -1,10 +1,11 @@
-import {todolistsAPI, TodolistType} from "../../api/todolists-api";
-import {RequestStatusType, setStatusAC} from "../../app/app-reducer";
+import {todolistsAPI} from "../../api/todolists-api";
+import {RequestStatusType, setStatusAC} from "../App/app-reducer";
 import {getTasksTC, ResultCodeStatuses} from "./tasks-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
+import {TodolistType} from "../../api/types";
 
 const initialState: TodolistDomainType[] = []
 

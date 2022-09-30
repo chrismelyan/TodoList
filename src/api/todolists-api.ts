@@ -1,72 +1,15 @@
 import axios from 'axios'
+import {GetTasksResponseType, LoginParamsType, TaskType, TodolistType, UpdateTaskType, ResponseType} from "./types";
 
-// TYPES
-export type TodolistType = {
-    id: string
-    addedDate: string
-    order: number
-    title: string
-}
-export enum TaskStatuses {
-    New = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3
-}
-export enum TaskPriorities {
-    Low = 0,
-    Middle = 1,
-    Hi = 2,
-    Urgently = 3,
-    Later = 4
-}
-export type TaskType = {
-    description: string
-    title: string
-    completed: boolean
-    status: TaskStatuses
-    priority: TaskPriorities
-    startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: string
-}
-type UpdateTaskType = {
-    title: string
-    description: string
-    completed: boolean
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-}
-export type FieldsErrorType = {field: string, error: string}
-export type ResponseType<D> = {
-    resultCode: number
-    messages: Array<string>
-    fieldsErrors?: Array<FieldsErrorType>
-    data: D
-}
-type GetTasksResponseType = {
-    items: Array<TaskType>
-    totalCount: number
-    error: string | null
-}
-export type LoginParamsType = {
-    email: string
-    password: string
-    rememberMe?: boolean
-    captcha?: string
-}
-
-const instance = axios.create({
-    baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+const settings = {
     withCredentials: true,
     headers: {
         'API-KEY': '344e1d93-75ad-4579-8284-aae71a3ea37e'
     }
+}
+const instance = axios.create({
+    baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+    ...settings
 })
 
 // api

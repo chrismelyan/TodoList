@@ -16,7 +16,7 @@ export type InitialStateType = {
 }
 const {setIsLoggedIn} = authActions
 
-export const initializedApp = createAsyncThunk('app/initializedApp', async (param, thunkAPI) => {
+const initializedApp = createAsyncThunk('app/initializedApp', async (param, thunkAPI) => {
     try {
         const res = await authAPI.me()
         if (res.data.resultCode === ResultCodeStatuses.success) {

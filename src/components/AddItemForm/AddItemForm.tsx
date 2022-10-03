@@ -4,6 +4,7 @@ import {IconButton} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
 import {RequestStatusType} from "../../features/App/app-reducer";
 
+export type AddItemFormSubmitHelperType = { setError: (error: string) => void, setTitle: (title: string) => void}
 type InputFormType = {
     callbackAddValue: (title: string) => void
     entityStatus?: RequestStatusType

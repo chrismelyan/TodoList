@@ -11,13 +11,10 @@ import {Paper} from "@mui/material";
 import {FormikHelpers, useFormik} from "formik";
 import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {authSelectors} from "./index";
+import {authActions, authSelectors} from "./index";
+import {useAppDispatch} from "../../utils/redux-utils";
+import {login} from "./auth-reducer";
 
-type FormikErrorType = {
-    email?: string
-    password?: string
-    rememberMe?: boolean
-}
 type FormikType = {
     email: string
     password: string
@@ -26,7 +23,9 @@ type FormikType = {
 
 export const Login = () => {
     const dispatch = useAppDispatch()
+
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -34,30 +33,26 @@ export const Login = () => {
             rememberMe: false
         },
         validate: (values) => {
-            const errors: FormikErrorType = {};
             if (!values.email) {
-                errors.email = 'Required';
+                return {email: 'Email is equired'};
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
+                return {email: 'Invalid email address'};
             }
 
             if (!values.password) {
-                errors.password = 'Required';
+                return {password: 'Password is required'};
             } else if (values.password.length < 3) {
-                errors.password = 'Min password length 3';
+                return {password: 'Minimum 3 symbols'};
             }
-
-            return errors;
         },
-        onSubmit: async (values, formikHelpers: FormikHelpers<FormikType>) => {
-            const action = await dispatch(loginTC(values));
-            if (loginTC.rejected.match(action)) {
+        onSubmit: async (values: FormikType, formikHelpers: FormikHelpers<FormikType>) => {
+            const action = await dispatch(authActions.login(values));
+            if (login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0]
                     formikHelpers.setFieldError(error.field, error.error)
-                } else {}
+                }
             }
-            // formik.resetForm();
         },
     })
 
@@ -71,10 +66,10 @@ export const Login = () => {
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>
-                            <p>To log in get registered
+                            <p>{'To log in get registered '}
                                 <a href={'https://social-network.samuraijs.com/'}
                                    target={'_blank'}
-                                   rel="noopener noreferrer"> here
+                                   rel="noopener noreferrer">here
                                 </a>
                             </p>
                             <p>or use common test account credentials:</p>

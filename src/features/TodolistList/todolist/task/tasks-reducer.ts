@@ -40,7 +40,7 @@ const removeTask = createAsyncThunk<{ taskId: string, todolistId: string }, { ta
         thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
         return {taskId: param.taskId, todolistId: param.todolistId}
     } catch (err: any) {
-        handleAsyncServerNetworkError(err, thunkAPI)
+        return handleAsyncServerNetworkError(err, thunkAPI)
     }
 })
 const updateTask = createAsyncThunk('task/changeTaskStatus', async (param: { todolistId: string, taskId: string, model: UpdateDomainTaskModelType }, thunkAPI) => {
@@ -58,11 +58,14 @@ const updateTask = createAsyncThunk('task/changeTaskStatus', async (param: { tod
         status: task.status,
         ...param.model
     }
-    const res = await todolistsAPI.updateTask(param.todolistId, param.taskId, apiModel)
     try {
+        const res = await todolistsAPI.updateTask(param.todolistId, param.taskId, apiModel)
+        console.log(res.resultCode)
         if (res.resultCode === ResultCodeStatuses.success) {
+            debugger
             return param
         } else {
+            debugger
             return handleAsyncServerAppError(res, thunkAPI)
         }
     } catch (err: any) {
@@ -83,6 +86,7 @@ export const slice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(todolistActions.addTodolist.fulfilled, (state, action) => {
+            debugger
             state[action.payload.todolist.id] = [];
         });
         builder.addCase(todolistActions.removeTodolist.fulfilled, (state, action) => {
@@ -108,6 +112,7 @@ export const slice = createSlice({
             state[action.payload.todoListId].unshift(action.payload);
         });
         builder.addCase(updateTask.fulfilled, (state, action) => {
+            debugger
             const tasks = state[action.payload.todolistId];
             const index = tasks.findIndex(el => el.id === action.payload.taskId);
             if (index > -1) {
@@ -116,6 +121,10 @@ export const slice = createSlice({
         });
     }
 })
+
+export const tasksReducer = slice.reducer;
+export const taskSliceActions = slice.actions;
+
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }

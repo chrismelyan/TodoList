@@ -5,8 +5,8 @@ import TodoList from "./todolist/TodoList";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {useNavigate} from "react-router-dom";
 import {authSelectors} from "../Auth";
-import {todolistSelectors} from "./index";
-import {useAppDispatch} from "../../utils/redux-utils";
+import {todolistActions, todolistSelectors} from "./index";
+import {useActions, useAppDispatch} from "../../utils/redux-utils";
 
 const TodolistsList = () => {
     const dispatch = useAppDispatch()
@@ -16,23 +16,25 @@ const TodolistsList = () => {
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
     const navigate = useNavigate()
 
+    const {getTodolists, addTodolist} = useActions(todolistActions)
+
     useEffect(() => {
         if(isLoggedIn) {
-            dispatch(getTodolistsTC())
+            getTodolists()
         } else {
             navigate('/login')
         }
     }, [isLoggedIn])
 
-    const addTodolist = useCallback((title: string) => {
-            dispatch(addTodolistTC(title))
+    const addTodolists = useCallback((title: string) => {
+            addTodolist(title)
     }, [dispatch])
 
     return (
         <div>
             <Grid container style={{padding: '30px'}}>
                 <Paper style={{padding: '20px', background: 'rgb(255,250,250, 0.9)'}}>
-                    <AddItemForm callbackAddValue={addTodolist}/>
+                    <AddItemForm callbackAddValue={addTodolists}/>
                 </Paper>
             </Grid>
             <Grid container spacing={3}>

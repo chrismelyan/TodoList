@@ -1,46 +1,40 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import EditableSpan from "../../../../components/EditableSpan/EditableSpan";
-import {removeTaskTC, updateTaskTC} from "./tasks-reducer";
-import {useDispatch} from "react-redux";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Checkbox, IconButton} from "@mui/material";
 import {TaskStatuses, TaskType} from "../../../../api/types";
+import {useActions} from "../../../../utils/redux-utils";
+import {tasksActions} from "../../index";
 
 type TaskPropsType = {
     task: TaskType
 }
 const Task: React.FC<TaskPropsType> = ({task}) => {
-    const dispatch = useDispatch()
     const taskId = task.id
     const todolistId = task.todoListId
 
-    const removeTask = (taskId: string) => {
-        dispatch(removeTaskTC({taskId: taskId, todolistId: todolistId}))
-    }
-    const changeStatus = useCallback((taskId: string, status: TaskStatuses) => {
-        const model = {...task, status}
-        dispatch(updateTaskTC({todolistId, taskId, model}))
-    }, [dispatch, todolistId])
+    const {removeTask, updateTask} = useActions(tasksActions)
 
-    const updateTask = useCallback((taskId: string, title: string) => {
-        const model = {...task, title}
-        dispatch(updateTaskTC({todolistId, taskId, model}))
-    }, [dispatch, todolistId])
+    const removeTaskCallback = useCallback(() => {
+        removeTask({taskId: taskId, todolistId: todolistId})
+    }, [taskId, todolistId])
 
-    const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
-        changeStatus(taskId, e.currentTarget.checked
-            ? TaskStatuses.Completed
-            : TaskStatuses.New)
-    }
-    const updateTaskHandler = (title: string) => {
-        updateTask(taskId, title)
-    }
+    const changeStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        debugger
+       updateTask({todolistId, taskId, model: {status: e.currentTarget.checked
+                   ? TaskStatuses.Completed
+                   : TaskStatuses.New}})
+    }, [todolistId, taskId])
+
+    const updateTaskTitle = useCallback((title: string) => {
+        updateTask({todolistId, taskId, model: {title}})
+    }, [todolistId, taskId])
 
     return (
         <div>
-            <Checkbox color={'primary'} onChange={changeTaskStatus} checked={task.status === TaskStatuses.Completed}/>
-            <EditableSpan value={task.title} callbackUpdate={updateTaskHandler}/>
-            <IconButton onClick={() => removeTask(taskId)}>
+            <Checkbox color={'primary'} onChange={changeStatus} checked={task.status === TaskStatuses.Completed}/>
+            <EditableSpan value={task.title} callbackUpdate={updateTaskTitle}/>
+            <IconButton onClick={removeTaskCallback}>
                 <HighlightOffIcon color={'inherit'}/>
             </IconButton>
         </div>

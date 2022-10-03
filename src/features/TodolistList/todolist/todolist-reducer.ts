@@ -47,7 +47,7 @@ const removeTodolist = createAsyncThunk<{ id: string }, string, ThunkError>('tod
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
             return {id: todolistId}
         } else {
-            return handleAsyncServerAppError(res.data, thunkAPI)
+            return handleAsyncServerAppError(res.data, thunkAPI, false)
         }
     } catch (err: any) {
         return handleAsyncServerNetworkError(err, thunkAPI)
@@ -60,10 +60,10 @@ const changeTodolistTitle = createAsyncThunk('todolists/changeTodolistTitle', as
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
             return {id: param.todolistId, title: param.title}
         } else {
-            return handleAsyncServerAppError(res.data, thunkAPI)
+            return handleAsyncServerAppError(res.data, thunkAPI, false)
         }
     } catch (err: any) {
-        return handleAsyncServerNetworkError(err, thunkAPI, false)
+        return handleAsyncServerNetworkError(err, thunkAPI)
     }
 })
 
@@ -109,7 +109,9 @@ export const slice = createSlice({
         builder.addCase(changeTodolistTitle.fulfilled, (state, action) => {
             // state.map(el => el.id === action.payload.todolistID ? {...el, title: action.payload.title} : el);
             const index = state.findIndex(el => el.id === action.payload.id);
-            state[index].title = action.payload?.title;
+            if (index > -1) {
+                state[index].title = action.payload.title;
+            }
         })
     }
 })

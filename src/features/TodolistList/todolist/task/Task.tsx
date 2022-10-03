@@ -20,7 +20,6 @@ const Task: React.FC<TaskPropsType> = ({task}) => {
     }, [taskId, todolistId])
 
     const changeStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        debugger
        updateTask({todolistId, taskId, model: {status: e.currentTarget.checked
                    ? TaskStatuses.Completed
                    : TaskStatuses.New}})

@@ -60,13 +60,10 @@ const updateTask = createAsyncThunk('task/changeTaskStatus', async (param: { tod
     }
     try {
         const res = await todolistsAPI.updateTask(param.todolistId, param.taskId, apiModel)
-        console.log(res.resultCode)
-        if (res.resultCode === ResultCodeStatuses.success) {
-            debugger
+        if (res.data.resultCode === ResultCodeStatuses.success) {
             return param
         } else {
-            debugger
-            return handleAsyncServerAppError(res, thunkAPI)
+            return handleAsyncServerAppError(res.data, thunkAPI)
         }
     } catch (err: any) {
         return handleAsyncServerNetworkError(err, thunkAPI)
@@ -86,7 +83,6 @@ export const slice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(todolistActions.addTodolist.fulfilled, (state, action) => {
-            debugger
             state[action.payload.todolist.id] = [];
         });
         builder.addCase(todolistActions.removeTodolist.fulfilled, (state, action) => {
@@ -112,7 +108,6 @@ export const slice = createSlice({
             state[action.payload.todoListId].unshift(action.payload);
         });
         builder.addCase(updateTask.fulfilled, (state, action) => {
-            debugger
             const tasks = state[action.payload.todolistId];
             const index = tasks.findIndex(el => el.id === action.payload.taskId);
             if (index > -1) {
